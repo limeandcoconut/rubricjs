@@ -4,9 +4,6 @@ import System from './System';
 export default class SubSystem extends System {
     constructor() {
         super();
-        if (new.target === SubSystem) {
-            throw new AbstractConstructError('Cannot construct class SubSystem instances directly');
-        }
 
         this.inputQueue = [];
 

@@ -1,10 +1,13 @@
+/* eslint-disable no-undef */
 let componentRegistry = Symbol();
 let entityIds = Symbol();
+/* eslint-enable no-undef */
 
 export default class EntityManager {
     constructor() {
         this.lowestFreeId = 10;
         this[entityIds] = [];
+        /* eslint-disable no-undef */
         this[componentRegistry] = new Map();
     }
 
@@ -13,16 +16,16 @@ export default class EntityManager {
             let id = this.lowestFreeId;
             this.lowestFreeId += 1;
             return id;
-        } else {
-            let entityIds = this[entityIds];
-            for (let i = 0, iLen = this.maxId; i < iLen; i++) {
-                if (entityIds.indexOf(i) === -1) {
-                    return i;
-                }
-            }
-
-            throw new RangeError('Maximum entity ids registered, approaching unsafe value');
         }
+
+        let ids = this[entityIds];
+        for (let i = 0, iLen = this.maxId; i < iLen; i++) {
+            if (ids.indexOf(i) === -1) {
+                return i;
+            }
+        }
+
+        throw new RangeError('Maximum entity ids registered, approaching unsafe value');
     }
 
     createEntity() {
@@ -32,22 +35,12 @@ export default class EntityManager {
     }
 
     deleteEntity(entityId) {
-        this[componentRegistry].forEach((componentsOfType, componentName) => {
+        this[componentRegistry].forEach((componentsOfType/* , componentName */) => {
             componentsOfType.delete(entityId);
         });
 
         this[entityIds].splice(this[entityIds].indexOf(entityId), 1);
     }
-
-
-    // getEntity(entityId) {
-    //     return entityId;
-    // }
-
-    // validateEntity(entityId) {
-    //     return this[entityIds].indexOf(entityId) !== -1;
-    // }
-
 
     validateComonentName(componentName) {
         if (typeof componentName === 'object') {
@@ -131,16 +124,17 @@ export default class EntityManager {
             return commonEntities;
         }
 
-        //TODO: Perf this similariliy to above perf
+        // TODO: Perf this similariliy to above perf
         componentNames.some((componentName) => {
-            // componentName = this.validateComonentName(componentName);
+            componentName = this.validateComonentName(componentName);
             let entitiesWithComponent = this.getEntitiesWithComponent(componentName);
 
             commonEntities = commonEntities.filter(entity => entitiesWithComponent.indexOf(entity) !== -1);
 
             if (!commonEntities.length) {
-                return true;
+                return [];
             }
+            return false;
         });
 
         return commonEntities;

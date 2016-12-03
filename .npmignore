@@ -1,11 +1,15 @@
 .babelrc
 .ds_store
+.nyc_output
 
 *.log
+npm_debug.*
 
 test.js
 webpack.config.js
 
 tests
+bin
 src
+coverage
 node_modules

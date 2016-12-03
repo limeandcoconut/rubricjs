@@ -3,7 +3,6 @@ let registryKey = Symbol();
 export default class TimerManager {
     constructor() {
         // FIXME: Generate uids
-        // FIXME: Consider getting rid of id list as this[registryKey].keys is available
         this.lowestFreeId = 10;
         this[registryKey] = new Map();
     }
@@ -17,7 +16,7 @@ export default class TimerManager {
 
         let timerRegistry = this[registryKey];
         for (let i = 0, iLen = this.maxId; i < iLen; i++) {
-            if (timerRegistry.has(i)) {
+            if (!timerRegistry.has(i)) {
                 return i;
             }
         }
@@ -44,7 +43,7 @@ export default class TimerManager {
     removeTimer(timerId) {
         if (typeof timerId === 'object') {
             if (timerId.constructor.name !== 'Timer') {
-                throw Error('Argument must be instance of class Timer');
+                throw TypeError('Argument of type object must be instance of class Timer');
             }
 
             timerId = timerId.id;

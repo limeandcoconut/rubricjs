@@ -1,110 +1,97 @@
+import ava from 'ava';
 import EntityFactory from '../src/EntityFactory.js';
+let ef;
+let registrySymbol;
 
-let expect = require('chai').expect;
-
-/* eslint-disable no-undef */
-describe('Entity Factory', function() {
-
-    /*
-     ██████ ██████  ███████  █████  ████████ ███████
-    ██      ██   ██ ██      ██   ██    ██    ██
-    ██      ██████  █████   ███████    ██    █████
-    ██      ██   ██ ██      ██   ██    ██    ██
-     ██████ ██   ██ ███████ ██   ██    ██    ███████
-    */
-
-    describe('Creating an Entity Factory', function() {
-        let ef = new EntityFactory();
-
-        it('should result private variable constructorRegistry', function() {
-            expect(ef.constructorRegistry).to.be.undefined;
-
-            let found = false;
-            let keys = Reflect.ownKeys(ef);
-            keys.forEach((key) => {
-                if (typeof key === 'symbol') {
-                    let prop = ef[key];
-                    if (prop.constructor && prop.constructor.name === 'Map') {
-                        expect(prop).to.have.property('size').equal(0);
-                        found = true;
-                    }
-                }
-            });
-            expect(found).to.equal(true);
-        });
-
+ava.beforeEach((test) => {
+    ef = new EntityFactory();
+    /* eslint-disable no-undef */
+    let keys = Reflect.ownKeys(ef);
+    /* eslint-enable no-undef */
+    keys.forEach((key) => {
+        if (typeof key === 'symbol') {
+            let prop = ef[key];
+            if (prop.constructor && prop.constructor.name === 'Map') {
+                registrySymbol = key;
+            }
+        }
     });
 
-    /*
-     ██████  ██████  ███    ██ ███████ ████████ ██████  ██    ██  ██████ ████████  ██████  ██████  ███████
-    ██      ██    ██ ████   ██ ██         ██    ██   ██ ██    ██ ██         ██    ██    ██ ██   ██ ██
-    ██      ██    ██ ██ ██  ██ ███████    ██    ██████  ██    ██ ██         ██    ██    ██ ██████  ███████
-    ██      ██    ██ ██  ██ ██      ██    ██    ██   ██ ██    ██ ██         ██    ██    ██ ██   ██      ██
-     ██████  ██████  ██   ████ ███████    ██    ██   ██  ██████   ██████    ██     ██████  ██   ██ ███████
-    */
+    if (!registrySymbol) {
+        test.fail();
+    }
+});
 
-    describe('On the subject of entity constructors, it', function() {
-        let ef = new EntityFactory();
+/*
+ ██████ ██████  ███████  █████  ████████ ███████
+██      ██   ██ ██      ██   ██    ██    ██
+██      ██████  █████   ███████    ██    █████
+██      ██   ██ ██      ██   ██    ██    ██
+ ██████ ██   ██ ███████ ██   ██    ██    ███████
+*/
 
-        it('should throw if passed invalid parameters', function() {
-            expect(() => {
-                ef.registerConstructor(1, () => {});
-            }).to.throw(TypeError, /parameter/i);
+ava('should result private variable constructorRegistry', test => {
+    test.is(ef.constructorRegistry, undefined);
+    test.truthy(registrySymbol);
+});
 
-            expect(() => {
-                ef.registerConstructor('foo', 'constructorName');
-            }).to.throw(TypeError, /parameter/i);
-        });
+/*
+ ██████  ██████  ███    ██ ███████ ████████ ██████  ██    ██  ██████ ████████  ██████  ██████  ███████
+██      ██    ██ ████   ██ ██         ██    ██   ██ ██    ██ ██         ██    ██    ██ ██   ██ ██
+██      ██    ██ ██ ██  ██ ███████    ██    ██████  ██    ██ ██         ██    ██    ██ ██████  ███████
+██      ██    ██ ██  ██ ██      ██    ██    ██   ██ ██    ██ ██         ██    ██    ██ ██   ██      ██
+ ██████  ██████  ██   ████ ███████    ██    ██   ██  ██████   ██████    ██     ██████  ██   ██ ███████
+*/
 
-        it('should store function in registry', function() {
-            ef.registerConstructor('test', () => {
-                return 'abc';
-            });
+ava('should throw if passed invalid parameters', test => {
+    test.throws(() => {
+        ef.registerConstructor(1, () => {});
+    }, /parameter/i);
 
-            let found = false;
-            let keys = Reflect.ownKeys(ef);
-            keys.forEach((key) => {
-                if (typeof key === 'symbol') {
-                    let prop = ef[key];
-                    if (prop.constructor && prop.constructor.name === 'Map') {
-                        expect(prop).to.have.property('size').equal(1);
-                        found = true;
-                    }
-                }
-            });
-            expect(found).to.equal(true);
-        });
+    test.throws(() => {
+        ef.registerConstructor('foo', 'constructorName');
+    }, /parameter/i);
+});
 
-        it('should result in a map entry keyed properly', function() {
-            let found = false;
-            let keys = Reflect.ownKeys(ef);
-            keys.forEach((key) => {
-                if (typeof key === 'symbol') {
-                    let prop = ef[key];
-                    if (prop.constructor && prop.constructor.name === 'Map') {
-                        expect(prop.has('Test')).to.equal(true);
-                        found = true;
-                    }
-                }
-            });
-            expect(found).to.equal(true)
-        });
-
-        it('should result proxy function calls similar to "createTest" to the stored constructor', function() {
-            expect(ef.createTest()).to.equal('abc');
-        });
-
-        it('should execute in proper scope', function() {
-            ef.registerConstructor('thisTest', function() {return this.constructor.name;});
-            let context = ef.createThisTest();
-            expect(context).to.equal(EntityFactory.name);
-        });
-
-        it('should not trap access to functions that are not stored', function() {
-            expect(() => {
-                ef.createOtherTest();
-            }).to.throw(TypeError);
-        });
+ava('should store function in registry', test => {
+    ef.registerConstructor('test', () => {
+        return 'abc';
     });
 
+    test.is(ef[registrySymbol].size, 1);
+});
+
+ava('should result in a map entry keyed properly', test => {
+    let constructorName = 'test';
+
+    ef.registerConstructor(constructorName, () => {
+        return 'abc';
+    });
+
+    let constructorKey = constructorName.charAt(0).toUpperCase() + constructorName.slice(1);
+
+    test.true(ef[registrySymbol].has(constructorKey));
+});
+
+ava('should result proxy function calls similar to "createTest" to the stored constructor', test => {
+    ef.registerConstructor('test', () => {
+        return 'abc';
+    });
+
+    test.is(ef.createTest(), 'abc');
+});
+
+ava('should execute in proper scope', test => {
+    ef.registerConstructor('thisTest', function() {
+        return this.constructor.name;
+    });
+
+    let context = ef.createThisTest();
+    test.is(context, EntityFactory.name);
+});
+
+ava('should not trap access to functions that are not stored', test => {
+    test.throws(() => {
+        ef.createOtherTest();
+    }, TypeError);
 });

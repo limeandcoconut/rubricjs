@@ -1,165 +1,197 @@
+import ava from 'ava';
 import System from '../src/System.js';
 import SubSystem from '../src/SubSystem.js';
-var expect = require('chai').expect;
 
-/* eslint-disable no-undef, no-new */
-describe('System class', function() {
+/* eslint-disable no-new */
 
-    describe('Creating Class', function() {
+let testSystem;
+let testSubSystem;
+let i;
 
-        it('should throw if constructed manually', function() {
-            expect(() => {
-                new System();
-            }).to.throw(Error, /system/i);
-        });
+class TestSystem extends System {
+    update() {
+        i++;
+        this.publish({a: i});
+    }
+}
 
-        it('should throw if update is not overridden', function() {
-            class Foo extends System {
-            }
+class TestSubSystem extends SubSystem {
+    update() {
+    }
+}
 
-            expect(() => {
-                new Foo();
-            }).to.throw(Error, /system/i);
-        });
+ava.beforeEach(function() {
+    testSystem = new TestSystem();
+    testSubSystem = new TestSubSystem();
+    i = 0;
+});
 
-        it('should construct properlly if method is overridden', function() {
-            class Bar extends System {
-                update() {
-                }
-            }
+/*
+███████ ██    ██ ███████ ████████ ███████ ███    ███
+██       ██  ██  ██         ██    ██      ████  ████
+███████   ████   ███████    ██    █████   ██ ████ ██
+     ██    ██         ██    ██    ██      ██  ██  ██
+███████    ██    ███████    ██    ███████ ██      ██
+*/
 
-            expect(() => {
-                new Bar();
-            }).to.not.throw(Error, /system/i);
-        });
+/*
+ ██████ ██████  ███████  █████  ████████ ███████
+██      ██   ██ ██      ██   ██    ██    ██
+██      ██████  █████   ███████    ██    █████
+██      ██   ██ ██      ██   ██    ██    ██
+ ██████ ██   ██ ███████ ██   ██    ██    ███████
+*/
 
-        describe('On the subject of publications, it ', function() {
-            let testSystem;
-            let i = 0;
+ava('should throw if constructed manually', test => {
+    test.throws(() => {
+        new System();
+    }, /system/i);
+});
 
-            before(function() {
-                class TestSystem extends System {
-                    update() {
-                        i++;
-                        this.publish({a: i});
-                    }
-                }
+ava('should throw if update is not overridden', test => {
+    class Foo extends System {
+    }
 
-                testSystem = new TestSystem();
-            });
+    test.throws(() => {
+        new Foo();
+    }, /system/i);
+});
 
-            it('should publish events to queue', function() {
-                testSystem.update();
-                expect(testSystem).to.have.property('events').with.length(1);
-            });
+ava('should construct properlly if method is overridden', test => {
+    class Bar extends System {
+        update() {
+        }
+    }
 
-            it('should clear events on each update', function() {
-                expect(testSystem.events[0]).to.have.property('a').equals(1);
-                testSystem.update();
-                expect(testSystem).to.have.property('events').with.length(1);
-                expect(testSystem.events[0]).to.have.property('a').equals(2);
-                testSystem.update();
-                expect(testSystem).to.have.property('events').with.length(1);
-                expect(testSystem.events[0]).to.have.property('a').not.equals(2);
-            });
+    test.notThrows(() => {
+        new Bar();
+    }, /system/i);
+});
 
-            it('should manually clear input queue when called', function() {
-                expect(testSystem.events).to.have.length(1);
+/*
+██████  ██    ██ ██████  ███████
+██   ██ ██    ██ ██   ██ ██
+██████  ██    ██ ██████  ███████
+██      ██    ██ ██   ██      ██
+██       ██████  ██████  ███████
+*/
 
-                testSystem.clearEvents();
-                expect(testSystem.events).to.have.length(0);
-            });
-        });
+ava('should publish events to queue', test => {
+    testSystem.update();
+    test.is(testSystem.events.length, 1);
+});
 
-    });
+ava('should clear events on each update', test => {
+    testSystem.update();
+    test.is(testSystem.events[0].a, 1);
+    testSystem.update();
+    test.is(testSystem.events.length, 1);
+    test.is(testSystem.events[0].a, 2);
+    testSystem.update();
+    test.is(testSystem.events.length, 1);
+    test.not(testSystem.events[0].a, 2);
+});
 
-    describe('Creating Class SubSystem ', function() {
+ava('should manually clear input queue when called', test => {
+    testSystem.update();
+    test.is(testSystem.events.length, 1);
 
-        it('should throw if constructed manually', function() {
-            expect(() => {
-                new SubSystem();
-            }).to.throw(Error, /system/i);
-        });
+    testSystem.clearEvents();
+    test.is(testSystem.events.length, 0);
+});
 
-        it('should throw if update is not overridden', function() {
-            class Foo extends SubSystem {
-            }
+/*
+ ██████ ██████  ███████  █████  ████████ ███████
+██      ██   ██ ██      ██   ██    ██    ██
+██      ██████  █████   ███████    ██    █████
+██      ██   ██ ██      ██   ██    ██    ██
+ ██████ ██   ██ ███████ ██   ██    ██    ███████
+*/
 
-            expect(() => {
-                new Foo();
-            }).to.throw(Error, /system/i);
-        });
+ava('should throw if constructed manually', test => {
+    test.throws(() => {
+        new SubSystem();
+    }, /system/i);
+});
 
-        describe('on the subject of subscriptions, it ', function() {
-            let testSubSystem;
-            let testSystem;
+ava('should throw if update is not overridden', test => {
+    class Foo extends SubSystem {
+    }
 
-            before(function() {
-                class TestSubSystem extends SubSystem {
-                    update() {
-                    }
-                }
+    test.throws(() => {
+        new Foo();
+    }, /system/i);
+});
 
-                class TestSystem extends System {
-                    update() {
-                        this.publish({a: Math.ceil(Math.random * 3)});
-                    }
-                }
+/*
+███████ ██    ██ ██████  ███████
+██      ██    ██ ██   ██ ██
+███████ ██    ██ ██████  ███████
+     ██ ██    ██ ██   ██      ██
+███████  ██████  ██████  ███████
+*/
 
-                testSubSystem = new TestSubSystem();
-                testSystem = new TestSystem();
-            });
+ava('should throw if subscribe method passed non instance of class System', test => {
+    test.throws(() => {
+        testSubSystem.subscribe({});
+    }, /system/i);
+});
 
-            it('should throw if subscribe method passed non instance of class System', function() {
-                expect(() => {
-                    testSubSystem.subscribe({});
-                }).to.throw(TypeError, /system/i);
-            });
+ava('should subscribe to events from passed system', test => {
+    testSubSystem.subscribe(testSystem);
+    testSystem.update();
+    testSubSystem.update();
+    test.is(testSubSystem.inputQueue.length, 1);
+});
 
-            it('should subscribe to events from passed system', function() {
-                testSubSystem.subscribe(testSystem);
-                testSystem.update();
-                testSubSystem.update();
-                expect(testSubSystem).to.have.property('inputQueue').with.length(1);
-            });
+ava('should clear input queue on each update', test => {
+    testSubSystem.subscribe(testSystem);
+    testSystem.update();
+    testSubSystem.update();
 
-            it('should clear input queue on each update', function() {
-                expect(testSubSystem.inputQueue[0]).to.have.property('a');
-                testSystem.update();
-                testSubSystem.update();
-                expect(testSubSystem).to.have.property('inputQueue').with.length(1);
-                expect(testSubSystem.inputQueue[0]).to.have.property('a');
-                testSystem.update();
-                testSubSystem.update();
-                expect(testSubSystem).to.have.property('inputQueue').with.length(1);
-                expect(testSubSystem.inputQueue[0]).to.have.property('a');
-            });
+    test.truthy(testSubSystem.inputQueue[0].a);
 
-            it('should clear publisher when unsubscribed', function() {
-                testSubSystem.unsubscribe({});
-                expect(testSubSystem).to.have.property('publisher').equal(null);
-            });
+    testSystem.update();
+    testSubSystem.update();
 
-            it('should clear input queue when unsubscribed', function() {
-                testSystem.update();
-                testSubSystem.update();
-                expect(testSubSystem.inputQueue).to.have.length(0);
-                testSystem.update();
-                testSubSystem.update();
-                expect(testSubSystem.inputQueue).to.have.length(0);
-            });
+    test.is(testSubSystem.inputQueue.length, 1);
+    test.truthy(testSubSystem.inputQueue[0].a);
 
-            it('should manually clear input queue when called', function() {
-                testSubSystem.subscribe(testSystem);
-                testSystem.update();
-                testSubSystem.update();
-                expect(testSubSystem.inputQueue).to.have.length(1);
+    testSystem.update();
+    testSubSystem.update();
 
-                testSubSystem.clearQueue();
-                expect(testSubSystem.inputQueue).to.have.length(0);
-            });
-        });
+    test.is(testSubSystem.inputQueue.length, 1);
+    test.truthy(testSubSystem.inputQueue[0].a);
+});
 
-    });
+ava('should clear publisher when unsubscribed', test => {
+    testSubSystem.subscribe(testSystem);
+    testSystem.update();
+    testSubSystem.update();
 
+    testSubSystem.unsubscribe();
+    test.is(testSubSystem.publisher, null);
+});
+
+ava('should clear input queue when unsubscribed', test => {
+    testSubSystem.subscribe(testSystem);
+    testSystem.update();
+    testSubSystem.update();
+    test.is(testSubSystem.inputQueue.length, 1);
+
+    testSubSystem.unsubscribe();
+    testSystem.update();
+    testSubSystem.update();
+    test.is(testSubSystem.inputQueue.length, 0);
+});
+
+ava('should manually clear input queue when called', test => {
+    testSubSystem.subscribe(testSystem);
+    testSystem.update();
+    testSubSystem.update();
+
+    test.is(testSubSystem.inputQueue.length, 1);
+
+    testSubSystem.clearQueue();
+    test.is(testSubSystem.inputQueue.length, 0);
 });

@@ -1,17 +1,16 @@
 export default class Timer {
     constructor(config, duration) {
-        if (config.onFirst && typeof config.onFirst !== 'function' ||
-            config.onEach && typeof config.onEach !== 'function' ||
-            config.onLast && typeof config.onLast !== 'function') {
+        if ((config.onFirst && typeof config.onFirst !== 'function') ||
+            (config.onEach && typeof config.onEach !== 'function') ||
+            (config.onLast && typeof config.onLast !== 'function')) {
             throw new TypeError('Timer configuration functions "onEach", "onFirst", and "onLast" must be functions');
         }
 
-        this.duration = duration || config.duration;
+        this.duration = (typeof duration === 'number') ? duration : config.duration;
 
         if (typeof this.duration !== 'number') {
             throw new TypeError('Duration is required');
         }
-
 
         this.ticks = this.duration;
 
@@ -34,6 +33,8 @@ export default class Timer {
                     config.onLast.apply(context);
                 };
             }
+
+            this.context = context;
         } else {
             this.onFirst = config.onFirst || null;
             this.onLast = config.onLast || null;

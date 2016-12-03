@@ -1,37 +1,29 @@
+import ava from 'ava';
 import InputAdapter from '../src/InputAdapter.js';
-var expect = require('chai').expect;
 
-/* eslint-disable no-undef */
-describe('InputAdapter class', function() {
+ava('should throw if constructed manually', test => {
+    test.throws(() => {
+        /* eslint-disable no-new */
+        new InputAdapter();
+    }, /input\s?adapter/i);
+});
 
-    describe('Creating Class', function() {
+ava('should throw if init is not overridden', test => {
+    class Foo extends InputAdapter {
+    }
 
-        it('should throw if constructed manually', function() {
-            expect(() => {
-                new InputAdapter();
-            }).to.throw(Error, /input\s?adapter/i);
-        });
+    test.throws(() => {
+        new Foo();
+    }, /input\s?adapter/i);
+});
 
-        it('should throw if init is not overridden', function() {
-            class Foo extends InputAdapter {
-            }
+ava('should construct properlly if method is overridden', test => {
+    class Bar extends InputAdapter {
+        init() {
+        }
+    }
 
-            expect(() => {
-                new Foo();
-            }).to.throw(Error, /input\s?adapter/i);
-        });
-
-        it('should construct properlly if method is overridden', function() {
-            class Bar extends InputAdapter {
-                init() {
-                }
-            }
-
-            expect(() => {
-                new Bar();
-            }).to.not.throw(Error, /input\s?adapter/i);
-        });
-
-    });
-
+    test.notThrows(() => {
+        new Bar();
+    }, /input\s?adapter/i);
 });

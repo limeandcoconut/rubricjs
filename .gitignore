@@ -1,6 +1,9 @@
 .ds_store
+.nyc_output
 
 *.log
+npm_debug.*
 
 dist
+coverage
 node_modules

@@ -27,7 +27,7 @@ class Rubric {
 
     addInputAdapter(inputAdapter) {
         if (!(inputAdapter instanceof InputAdapter)) {
-            throw new TypeError();
+            throw new TypeError('Must be instance of InputAdapter');
         }
 
         this.inputAdapters.set(inputAdapter.constructor.name, inputAdapter);
@@ -35,7 +35,7 @@ class Rubric {
 
     addPrimaryInputAdapter(inputAdapter) {
         if (!(inputAdapter instanceof InputAdapter)) {
-            throw new TypeError();
+            throw new TypeError('Must be instance of InputAdapter');
         }
 
         this.primaryInput = inputAdapter;
