@@ -1,4 +1,4 @@
-import Rubric from './RubricClass';
+import Rubric from './Rubric';
 import System from './System';
 import InputAdapter from './InputAdapter';
 import EntityManager from './EntityManager';
