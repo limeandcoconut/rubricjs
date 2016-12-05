@@ -1,6 +1,6 @@
-import ava from 'ava';
-import Rubric from '../src/Rubric.js';
-import InputAdapter from '../src/InputAdapter.js';
+const ava = require('ava').default;
+const Rubric = require('../src/Rubric.js').default;
+const InputAdapter = require('../src/InputAdapter.js').default;
 
 let config = {
     engine: {},

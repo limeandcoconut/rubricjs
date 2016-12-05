@@ -1,6 +1,6 @@
-import ava from 'ava';
-import System from '../src/System.js';
-import SubSystem from '../src/SubSystem.js';
+const ava = require('ava').default;
+const System = require('../src/System.js').default;
+const SubSystem = require('../src/SubSystem.js').default;
 
 /* eslint-disable no-new */
 

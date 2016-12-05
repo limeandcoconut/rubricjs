@@ -1,5 +1,5 @@
-import ava from 'ava';
-import Timer from '../src/Timer.js';
+const ava = require('ava').default;
+const Timer = require('../src/Timer.js').default;
 
 let msg;
 let timer;

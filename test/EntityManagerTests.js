@@ -1,6 +1,6 @@
-import ava from 'ava';
-import EntityManager from '../src/EntityManager.js';
-import auid from 'alphastring';
+const ava = require('ava').default;
+const EntityManager = require('../src/EntityManager.js').default;
+const auid = require('alphastring');
 
 function createComponentClass() {
     let componentName = auid();

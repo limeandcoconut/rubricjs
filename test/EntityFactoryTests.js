@@ -1,5 +1,6 @@
-import ava from 'ava';
-import EntityFactory from '../src/EntityFactory.js';
+const ava = require('ava').default;
+const EntityFactory = require('../src/EntityFactory.js').default;
+
 let ef;
 let registrySymbol;
 

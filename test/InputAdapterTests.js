@@ -1,5 +1,5 @@
-import ava from 'ava';
-import InputAdapter from '../src/InputAdapter.js';
+const ava = require('ava').default;
+const InputAdapter = require('../src/InputAdapter.js').default;
 
 ava('should throw if constructed manually', test => {
     test.throws(() => {

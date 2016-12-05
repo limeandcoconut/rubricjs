@@ -1,6 +1,6 @@
-import ava from 'ava';
-import Timer from '../src/Timer.js';
-import TimerManager from '../src/TimerManager.js';
+const ava = require('ava').default;
+const Timer =  require('../src/Timer.js').default;
+const TimerManager = require('../src/TimerManager.js').default;
 
 let timer;
 let tm;
