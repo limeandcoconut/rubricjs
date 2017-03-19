@@ -1,5 +1,6 @@
-const ava = require('ava').default;
-const EntityManager = require('../src/EntityManager.js').default;
+/* eslint-env mocha, es6 */
+const EntityManager = require(`../dist/EntityManager.js`);
+const expect = require('chai').expect;
 const auid = require('alphastring');
 
 function createComponentClass() {
@@ -10,351 +11,383 @@ function createComponentClass() {
     return Function(`return function ${componentName}(){this.${propertyName} = 'foo'; this.propertyName = '${propertyName}';}`)();
 }
 
-let em;
-let idsSymbol;
-let registrySymbol;
+describe('EntityManager Class', function() {
 
-let ComponentClass1;
-let component1;
-let ComponentClass2;
-let component2;
+    let em;
+    let idsSymbol;
+    let registrySymbol;
 
-ava.beforeEach((test) => {
-    em = new EntityManager();
-    ComponentClass1 = createComponentClass();
-    component1 = new ComponentClass1();
-    ComponentClass2 = createComponentClass();
-    component2 = new ComponentClass2();
+    let ComponentClass1;
+    let component1;
+    let ComponentClass2;
+    let component2;
 
-    /* eslint-disable no-undef */
-    let keys = Reflect.ownKeys(em);
-    /* eslint-enable no-undef */
+    beforeEach(function() {
+        em = new EntityManager();
+        ComponentClass1 = createComponentClass();
+        component1 = new ComponentClass1();
+        ComponentClass2 = createComponentClass();
+        component2 = new ComponentClass2();
 
-    keys.forEach((key) => {
-        let prop = em[key];
-        if (typeof key === 'symbol') {
-            if (prop.constructor.name === 'Array') {
-                idsSymbol = key;
-            } else if (prop.constructor.name === 'Map') {
-                registrySymbol = key;
+        /* eslint-disable no-undef */
+        let keys = Reflect.ownKeys(em);
+        /* eslint-enable no-undef */
+
+        keys.forEach((key) => {
+            let prop = em[key];
+            if (typeof key === 'symbol') {
+                if (prop.constructor.name === 'Array') {
+                    idsSymbol = key;
+                } else if (prop.constructor.name === 'Map') {
+                    registrySymbol = key;
+                }
             }
+            return false;
+        });
+
+        if (!idsSymbol || !registrySymbol) {
+            throw new Error('Cannot reflect keys from EntityManager class');
         }
-        return false;
     });
 
-    if (!idsSymbol || !registrySymbol) {
-        test.fail();
-    }
-});
+    /*
+     ██████ ██████  ███████  █████  ████████ ███████
+    ██      ██   ██ ██      ██   ██    ██    ██
+    ██      ██████  █████   ███████    ██    █████
+    ██      ██   ██ ██      ██   ██    ██    ██
+     ██████ ██   ██ ███████ ██   ██    ██    ███████
+    */
 
-/*
- ██████ ██████  ███████  █████  ████████ ███████
-██      ██   ██ ██      ██   ██    ██    ██
-██      ██████  █████   ███████    ██    █████
-██      ██   ██ ██      ██   ██    ██    ██
- ██████ ██   ██ ███████ ██   ██    ██    ███████
-*/
+    describe('One the subject of creating an instance, it ', function() {
 
-ava('should result private lists', test => {
-    test.is(em.entityIds, undefined);
-    test.is(em.componentRegistry, undefined);
-});
+        it('should result private lists', function() {
+            expect(em.entityIds).to.be.undefined;
+            expect(em.componentRegistry).to.be.undefined;
+        });
 
-ava('should result in empty lists', test => {
-    test.is(em[idsSymbol].length, 0);
-    test.is(em[registrySymbol].size, 0);
-});
+        it('should result in empty lists', function() {
+            expect(em[idsSymbol]).to.have.length(0);
+            expect(em[registrySymbol]).to.have.property('size').equals(0);
+        });
 
-/*
-███████ ███    ██ ████████ ██ ████████ ██ ███████ ███████
-██      ████   ██    ██    ██    ██    ██ ██      ██
-█████   ██ ██  ██    ██    ██    ██    ██ █████   ███████
-██      ██  ██ ██    ██    ██    ██    ██ ██           ██
-███████ ██   ████    ██    ██    ██    ██ ███████ ███████
-*/
+    });
 
-/*
- ██████ ██████  ███████  █████  ████████ ███████
-██      ██   ██ ██      ██   ██    ██    ██
-██      ██████  █████   ███████    ██    █████
-██      ██   ██ ██      ██   ██    ██    ██
- ██████ ██   ██ ███████ ██   ██    ██    ███████
-*/
+    /*
+    ███████ ███    ██ ████████ ██ ████████ ██ ███████ ███████
+    ██      ████   ██    ██    ██    ██    ██ ██      ██
+    █████   ██ ██  ██    ██    ██    ██    ██ █████   ███████
+    ██      ██  ██ ██    ██    ██    ██    ██ ██           ██
+    ███████ ██   ████    ██    ██    ██    ██ ███████ ███████
+    */
 
-ava('should result in expected when incrementing ids', test => {
-    test.is(em.createEntity(), 10);
-    test.is(em.createEntity(), 11);
-});
+    /*
+     ██████ ██████  ███████  █████  ████████ ███████
+    ██      ██   ██ ██      ██   ██    ██    ██
+    ██      ██████  █████   ███████    ██    █████
+    ██      ██   ██ ██      ██   ██    ██    ██
+     ██████ ██   ██ ███████ ██   ██    ██    ███████
+    */
 
-ava('should search for free ids if max reached', test => {
-    em.lowestFreeId = em.maxId;
+    describe('On the subject of creating entities, it, ', function() {
 
-    test.is(em.createEntity(), 0);
-    test.is(em.createEntity(), 1);
-});
+        it('should result in expected when incrementing ids', function() {
+            expect(em.createEntity()).to.equal(10);
+            expect(em.createEntity()).to.equal(11);
+        });
 
-ava('should throw if no ids available', test => {
-    em.maxId = 0;
+        it('should search for free ids if max reached', function() {
+            em.lowestFreeId = em.maxId;
 
-    test.throws(() => {
-        em.createEntity();
-    }, RangeError);
-});
+            expect(em.createEntity()).to.equal(0);
+            expect(em.createEntity()).to.equal(1);
+        });
 
-/*
- ██████  ██████  ███    ███ ██████   ██████  ███    ██ ███████ ███    ██ ████████ ███████
-██      ██    ██ ████  ████ ██   ██ ██    ██ ████   ██ ██      ████   ██    ██    ██
-██      ██    ██ ██ ████ ██ ██████  ██    ██ ██ ██  ██ █████   ██ ██  ██    ██    ███████
-██      ██    ██ ██  ██  ██ ██      ██    ██ ██  ██ ██ ██      ██  ██ ██    ██         ██
- ██████  ██████  ██      ██ ██       ██████  ██   ████ ███████ ██   ████    ██    ███████
-*/
+        it('should throw if no ids available', function() {
+            em.maxId = 0;
 
-/*
- █████  ██████  ██████
-██   ██ ██   ██ ██   ██
-███████ ██   ██ ██   ██
-██   ██ ██   ██ ██   ██
-██   ██ ██████  ██████
-*/
+            expect(() => {
+                em.createEntity();
+            }).to.throw(RangeError, /unsafe/i);
+        });
 
-ava('should result in expected structure', test => {
-    let entity1 = em.createEntity();
-    em.createEntity(entity1);
-    em.addComponent(component1, entity1);
+    });
 
-    /* eslint-disable no-undef */
-    let mockRegistry = new Map();
-    mockRegistry.set(component1.constructor.name, new Map());
-    /* eslint-enable no-undef */
-    mockRegistry.get(component1.constructor.name).set(entity1, component1);
+    /*
+     ██████  ██████  ███    ███ ██████   ██████  ███    ██ ███████ ███    ██ ████████ ███████
+    ██      ██    ██ ████  ████ ██   ██ ██    ██ ████   ██ ██      ████   ██    ██    ██
+    ██      ██    ██ ██ ████ ██ ██████  ██    ██ ██ ██  ██ █████   ██ ██  ██    ██    ███████
+    ██      ██    ██ ██  ██  ██ ██      ██    ██ ██  ██ ██ ██      ██  ██ ██    ██         ██
+     ██████  ██████  ██      ██ ██       ██████  ██   ████ ███████ ██   ████    ██    ███████
+    */
 
-    test.is(em[registrySymbol].size, 1);
-    test.is(em[registrySymbol].get(component1.constructor.name).size, 1);
-    test.is(em[registrySymbol].get(component1.constructor.name).get(entity1)[component1.propertyName], 'foo');
-    test.deepEqual(em[registrySymbol], mockRegistry);
-});
+    /*
+     █████  ██████  ██████
+    ██   ██ ██   ██ ██   ██
+    ███████ ██   ██ ██   ██
+    ██   ██ ██   ██ ██   ██
+    ██   ██ ██████  ██████
+    */
 
-ava('should not cause intersections between components', test => {
-    let entity1 = em.createEntity();
-    em.addComponent(component1, entity1);
-    em.addComponent(component2, entity1);
+    describe('On the subject of adding components, it, ', function() {
 
-    /* eslint-disable no-undef */
-    let mockRegistry = new Map();
-    mockRegistry.set(component1.constructor.name, new Map());
-    mockRegistry.get(component1.constructor.name).set(entity1, component1);
+        it('should result in expected structure', function() {
+            let entity1 = em.createEntity();
+            em.createEntity(entity1);
+            em.addComponent(component1, entity1);
 
-    mockRegistry.set(component2.constructor.name, new Map());
-    /* eslint-enable no-undef */
-    mockRegistry.get(component2.constructor.name).set(entity1, component2);
+            // let mockRegistry = new Map();
+            // mockRegistry.set(component1.constructor.name, new Map());
+            // mockRegistry.get(component1.constructor.name).set(entity1, component1);
 
-    test.deepEqual(em[registrySymbol], mockRegistry);
-});
+            expect(em[registrySymbol]).to.have.property('size').equals(1);
+            expect(em[registrySymbol].get(component1.constructor.name)).to.have.property('size').equals(1);
+            expect(em[registrySymbol].get(component1.constructor.name).get(entity1)).to.have.property(component1.propertyName).equals('foo');
+        });
 
-ava('should throw if non-object is passed for component', test => {
-    let entity1 = em.createEntity();
-    test.throws(() => {
-        em.addComponent(1, entity1);
-    }, TypeError);
-});
+        it('should not cause intersections between components', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            em.addComponent(component2, entity1);
 
-/*
-██████  ███████ ██      ███████ ████████ ███████
-██   ██ ██      ██      ██         ██    ██
-██   ██ █████   ██      █████      ██    █████
-██   ██ ██      ██      ██         ██    ██
-██████  ███████ ███████ ███████    ██    ███████
-*/
+            // let mockRegistry = new Map();
+            // mockRegistry.set(component1.constructor.name, new Map());
+            // mockRegistry.get(component1.constructor.name).set(entity1, component1);
+            //
+            // mockRegistry.set(component2.constructor.name, new Map());
+            // mockRegistry.get(component2.constructor.name).set(entity1, component2);
 
-ava('should result in empty list', test => {
-    let entity1 = em.createEntity();
-    em.addComponent(component1, entity1);
-    em.deleteEntity();
-    test.is(em[idsSymbol].length, 0);
-    test.is(em[registrySymbol].size, 1);
-    test.true(em[registrySymbol].get(component1.constructor.name).constructor.name === 'Map');
-    test.is(em[registrySymbol].get(component1.constructor.name).size, 1);
-});
+            // expect(em[registrySymbol]).to.eql(mockRegistry);
+            expect(em[registrySymbol]).to.have.property('size').equal(2);
+            expect(em[registrySymbol].get(component1.constructor.name)).to.have.property('size').equal(1);
+            expect(em[registrySymbol].get(component2.constructor.name)).to.have.property('size').equal(1);
+            expect(em[registrySymbol].get(component1.constructor.name).get(entity1)).to.equal(component1);
+            expect(em[registrySymbol].get(component2.constructor.name).get(entity1)).to.equal(component2);
 
-ava('should clear all', test => {
-    em.createEntity();
-    em.createEntity();
-    em.createEntity();
-    em.deleteAllEntities();
+        });
 
-    test.is(em[idsSymbol].length, 0);
-    test.is(em[registrySymbol].size, 0);
-});
+        it('should throw if non-object is passed for component', function() {
+            let entity1 = em.createEntity();
+            expect(() => {
+                em.addComponent(1, entity1);
+            }).to.throw(TypeError, /component/i);
+        });
 
-/*
-██████  ███████ ████████ ██████  ██ ███████ ██    ██ ███████
-██   ██ ██         ██    ██   ██ ██ ██      ██    ██ ██
-██████  █████      ██    ██████  ██ █████   ██    ██ █████
-██   ██ ██         ██    ██   ██ ██ ██       ██  ██  ██
-██   ██ ███████    ██    ██   ██ ██ ███████   ████   ███████
-*/
+    });
 
-ava('should return proper entities', test => {
-    let entity1 = em.createEntity();
-    let entity2 = em.createEntity();
+    /*
+    ██████  ███████ ██      ███████ ████████ ███████
+    ██   ██ ██      ██      ██         ██    ██
+    ██   ██ █████   ██      █████      ██    █████
+    ██   ██ ██      ██      ██         ██    ██
+    ██████  ███████ ███████ ███████    ██    ███████
+    */
 
-    em.addComponent(component1, entity1);
-    em.addComponent(component2, entity2);
+    describe('On the subject of deleting entities, it, ', function() {
 
-    let retrieved = em.getEntitiesWithComponent(component1.constructor.name);
-    test.deepEqual(retrieved, [entity1]);
-    retrieved = em.getEntitiesWithComponent(component2.constructor.name);
-    test.deepEqual(retrieved, [entity2]);
-});
+        it('should result in empty list', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            em.deleteEntity();
+            expect(em[idsSymbol]).to.have.length(0);
+            expect(em[registrySymbol]).to.have.property('size').equal(1);
+            expect(em[registrySymbol].get(component1.constructor.name).constructor.name).to.equal('Map');
+            expect(em[registrySymbol].get(component1.constructor.name)).to.have.property('size').equal(1);
+        });
 
-ava('should return empty array if no entities found', test => {
-    let retrieved = em.getEntitiesWithComponent('foo');
-    test.is(retrieved.length, 0);
-});
+        it('should clear all', function() {
+            em.createEntity();
+            em.createEntity();
+            em.createEntity();
+            em.deleteAllEntities();
 
-ava('should return entities from intersection of component list', test => {
-    let entity1 = em.createEntity();
-    let entity2 = em.createEntity();
-    em.addComponent(component1, entity1);
-    em.addComponent(component2, entity1);
+            expect(em[idsSymbol]).to.have.length(0);
+            expect(em[registrySymbol]).to.have.property('size').equal(0);
+        });
 
-    em.addComponent(component2, entity2);
+    });
 
-    let retrieved = em.getEntitiesWithComponents([component1.constructor.name, component2.constructor.name]);
-    test.deepEqual(retrieved, [entity1]);
-    retrieved = em.getEntitiesWithComponents([component2.constructor.name]);
-    test.is(retrieved.length, 2);
-    test.not(retrieved[0], retrieved[1]);
-});
+    /*
+    ██████  ███████ ████████ ██████  ██ ███████ ██    ██ ███████
+    ██   ██ ██         ██    ██   ██ ██ ██      ██    ██ ██
+    ██████  █████      ██    ██████  ██ █████   ██    ██ █████
+    ██   ██ ██         ██    ██   ██ ██ ██       ██  ██  ██
+    ██   ██ ███████    ██    ██   ██ ██ ███████   ████   ███████
+    */
 
-ava('should return entities from mixed list of constructor names and instances', test => {
-    let entity1 = em.createEntity();
-    let entity2 = em.createEntity();
-    em.addComponent(component1, entity1);
-    em.addComponent(component2, entity1);
+    describe('On the subject of creating entities, it, ', function() {
 
-    em.addComponent(component2, entity2);
+        it('should return proper entities', function() {
+            let entity1 = em.createEntity();
+            let entity2 = em.createEntity();
 
-    let retrieved = em.getEntitiesWithComponents([component1, component2.constructor.name]);
-    test.deepEqual(retrieved, [entity1]);
-    retrieved = em.getEntitiesWithComponents([component2]);
-    test.is(retrieved.length, 2);
-    test.not(retrieved[0], retrieved[1]);
-});
+            em.addComponent(component1, entity1);
+            em.addComponent(component2, entity2);
 
-ava('should throw when a non array is presented to getEntitiesWithComponents', test => {
-    let entity1 = em.createEntity();
+            let retrieved = em.getEntitiesWithComponent(component1.constructor.name);
+            expect(retrieved).eql([entity1]);
+            retrieved = em.getEntitiesWithComponent(component2.constructor.name);
+            expect(retrieved).eql([entity2]);
+        });
 
-    em.addComponent(component1, entity1);
+        it('should return empty array if no entities found', function() {
+            let retrieved = em.getEntitiesWithComponent('foo');
+            expect(retrieved).to.have.length(0);
+        });
 
-    test.throws(() => {
-        em.getEntitiesWithComponents(component1);
-    }, TypeError);
-});
+        // it('should return entities from intersection of component list', function() {
+        //     let entity1 = em.createEntity();
+        //     let entity2 = em.createEntity();
+        //     em.addComponent(component1, entity1);
+        //     em.addComponent(component2, entity1);
+        //
+        //     em.addComponent(component2, entity2);
+        //
+        //     let retrieved = em.getEntitiesWithComponents([component1.constructor.name, component2.constructor.name]);
+        //     expect(retrieved).eql([entity1]);
+        //     retrieved = em.getEntitiesWithComponents([component2.constructor.name]);
+        //     expect(retrieved).to.have.length(2);
+        //     expect(retrieved[0]).not.equal(retrieved[1]);
+        // });
 
-ava('should return empty array if no entities exist', test => {
-    let retrieved = em.getEntitiesWithComponents(['bar']);
-    test.is(retrieved.length, 0);
-});
+        it('should return entities from mixed list of constructor names and instances', function() {
+            let entity1 = em.createEntity();
+            let entity2 = em.createEntity();
+            em.addComponent(component1, entity1);
+            em.addComponent(component2, entity1);
 
-ava('should return empty array if no entities found', test => {
-    let entity1 = em.createEntity();
-    em.addComponent(component1, entity1);
-    let retrieved = em.getEntitiesWithComponents([component1, component2]);
-    test.is(retrieved.length, 0);
-});
+            em.addComponent(component2, entity2);
 
-ava('should retrieve all entities', test => {
-    em.createEntity();
-    em.createEntity();
-    em.createEntity();
+            let retrieved = em.getEntitiesWithComponents([component1, component2.constructor.name]);
+            expect(retrieved).eql([entity1]);
+            retrieved = em.getEntitiesWithComponents([component2]);
+            expect(retrieved).to.have.length(2);
+            expect(retrieved[0]).not.equal(retrieved[1]);
+        });
 
-    let retrieved = em.getAllEntities();
-    test.is(retrieved.length, 3);
-    test.not(retrieved[0], retrieved[1]);
-    test.not(retrieved[0], retrieved[2]);
-    test.not(retrieved[1], retrieved[2]);
-});
+        it('should throw when a non array is presented to getEntitiesWithComponents', function() {
+            let entity1 = em.createEntity();
 
-/*
-██████  ███████ ███    ███  ██████  ██    ██ ███████
-██   ██ ██      ████  ████ ██    ██ ██    ██ ██
-██████  █████   ██ ████ ██ ██    ██ ██    ██ █████
-██   ██ ██      ██  ██  ██ ██    ██  ██  ██  ██
-██   ██ ███████ ██      ██  ██████    ████   ███████
-*/
+            em.addComponent(component1, entity1);
 
-ava('should work with constructor name or instance', test => {
-    let entity1 = em.createEntity();
-    em.addComponent(component1, entity1);
-    em.removeComponent(component1.constructor.name, entity1);
-    em.addComponent(component1, entity1);
-    em.removeComponent(component1, entity1);
+            expect(() => {
+                em.getEntitiesWithComponents(component1);
+            }).to.throw(TypeError, /array/i);
+        });
 
-    /* eslint-disable no-undef */
-    let mockRegistry = new Map();
-    mockRegistry.set(component1.constructor.name, new Map());
-    /* eslint-enable no-undef */
-    mockRegistry.get(component1.constructor.name).set(entity1, component1);
-    mockRegistry.get(component1.constructor.name).delete(entity1);
+        it('should return empty array if no entities exist', function() {
+            let retrieved = em.getEntitiesWithComponents(['bar']);
+            expect(retrieved).to.have.length(0);
+        });
 
-    test.is(em[registrySymbol].size, 1);
-    test.is(em[registrySymbol].get(component1.constructor.name).size, 0);
-    test.is(em[registrySymbol].get(component1.constructor.name).has(entity1), false);
-    test.deepEqual(em[registrySymbol], mockRegistry);
-});
+        it('should return empty array if no entities found', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            let retrieved = em.getEntitiesWithComponents([component1, component2]);
+            expect(retrieved).to.have.length(0);
+        });
 
-ava('should generate expected structure', test => {
-    let entity1 = em.createEntity();
-    em.addComponent(component1, entity1);
-    em.addComponent(component2, entity1);
-    em.removeComponent(component1, entity1);
+        it('should retrieve all entities', function() {
+            em.createEntity();
+            em.createEntity();
+            em.createEntity();
 
-    /* eslint-disable no-undef */
-    let mockRegistry = new Map();
-    mockRegistry.set(component1.constructor.name, new Map());
-    mockRegistry.get(component1.constructor.name).set(entity1, component1);
+            let retrieved = em.getAllEntities();
+            expect(retrieved).to.have.length(3);
+            expect(retrieved[0]).not.equal(retrieved[1]);
+            expect(retrieved[0]).not.equal(retrieved[2]);
+            expect(retrieved[1]).not.equal(retrieved[2]);
+        });
 
-    mockRegistry.set(component2.constructor.name, new Map());
-    /* eslint-enable no-undef */
-    mockRegistry.get(component2.constructor.name).set(entity1, component2);
+    });
 
-    mockRegistry.get(component1.constructor.name).delete(entity1);
+    /*
+    ██████  ███████ ███    ███  ██████  ██    ██ ███████
+    ██   ██ ██      ████  ████ ██    ██ ██    ██ ██
+    ██████  █████   ██ ████ ██ ██    ██ ██    ██ █████
+    ██   ██ ██      ██  ██  ██ ██    ██  ██  ██  ██
+    ██   ██ ███████ ██      ██  ██████    ████   ███████
+    */
 
-    test.deepEqual(em[registrySymbol], mockRegistry);
-});
+    describe('On the subject of removing entities, it, ', function() {
 
-ava('should return false if no component was removed', test => {
-    let entity1 = em.createEntity();
-    let entity2 = em.createEntity();
-    em.addComponent(component1, entity1);
+        it('should work with constructor name or instance', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            em.removeComponent(component1.constructor.name, entity1);
+            em.addComponent(component1, entity1);
+            em.removeComponent(component1, entity1);
 
-    test.false(em.removeComponent(component1, entity2));
-    test.false(em.removeComponent(component2, entity2));
-});
+            // let mockRegistry = new Map();
+            // mockRegistry.set(component1.constructor.name, new Map());
+            // mockRegistry.get(component1.constructor.name).set(entity1, component1);
+            // mockRegistry.get(component1.constructor.name).delete(entity1);
 
-/*
-██████  ███████ ████████ ██████  ██ ███████ ██    ██ ███████        ███████ ███    ██ ████████ ██ ████████ ██ ███████ ███████
-██   ██ ██         ██    ██   ██ ██ ██      ██    ██ ██             ██      ████   ██    ██    ██    ██    ██ ██      ██
-██████  █████      ██    ██████  ██ █████   ██    ██ █████          █████   ██ ██  ██    ██    ██    ██    ██ █████   ███████
-██   ██ ██         ██    ██   ██ ██ ██       ██  ██  ██             ██      ██  ██ ██    ██    ██    ██    ██ ██           ██
-██   ██ ███████    ██    ██   ██ ██ ███████   ████   ███████        ███████ ██   ████    ██    ██    ██    ██ ███████ ███████
-*/
+            expect(em[registrySymbol]).to.have.property('size').equal(1);
+            expect(em[registrySymbol].get(component1.constructor.name)).to.have.property('size').equal(0);
+            expect(em[registrySymbol].get(component1.constructor.name).has(entity1)).equal(false);
+            // expect(em[registrySymbol]).eql(mockRegistry);
+        });
 
-ava('should return proper instance', test => {
-    let entity1 = em.createEntity();
-    em.addComponent(component1, entity1);
-    let retrieved = em.getComponent(component1.constructor.name, entity1);
+        it('should generate expected structure', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            em.addComponent(component2, entity1);
+            em.removeComponent(component1, entity1);
 
-    test.is(retrieved, component1);
-});
+            // let mockRegistry = new Map();
+            // mockRegistry.set(component1.constructor.name, new Map());
+            // mockRegistry.get(component1.constructor.name).set(entity1, component1);
+            //
+            // mockRegistry.set(component2.constructor.name, new Map());
+            // mockRegistry.get(component2.constructor.name).set(entity1, component2);
+            //
+            // mockRegistry.get(component1.constructor.name).delete(entity1);
+            //
+            // expect(em[registrySymbol]).eql(mockRegistry);
 
-ava('should work with constructor name or instance', test => {
-    let entity1 = em.createEntity();
+            expect(em[registrySymbol]).to.have.property('size').equal(2);
+            expect(em[registrySymbol].get(component1.constructor.name)).to.have.property('size').equal(0);
+            expect(em[registrySymbol].get(component2.constructor.name)).to.have.property('size').equal(1);
+            expect(em[registrySymbol].get(component2.constructor.name).get(entity1)).to.equal(component2);
+        });
 
-    em.addComponent(component1, entity1);
-    let retrieved = em.getComponent(component1.constructor.name, entity1);
-    test.is(retrieved, component1);
-    retrieved = em.getComponent(component1, entity1);
-    test.is(retrieved, component1);
+        it('should return false if no component was removed', function() {
+            let entity1 = em.createEntity();
+            let entity2 = em.createEntity();
+            em.addComponent(component1, entity1);
+
+            expect(em.removeComponent(component1)).to.not.equal(entity2);
+            expect(em.removeComponent(component2)).to.not.equal(entity2);
+        });
+
+    });
+
+    /*
+    ██████  ███████ ████████ ██████  ██ ███████ ██    ██ ███████        ███████ ███    ██ ████████ ██ ████████ ██ ███████ ███████
+    ██   ██ ██         ██    ██   ██ ██ ██      ██    ██ ██             ██      ████   ██    ██    ██    ██    ██ ██      ██
+    ██████  █████      ██    ██████  ██ █████   ██    ██ █████          █████   ██ ██  ██    ██    ██    ██    ██ █████   ███████
+    ██   ██ ██         ██    ██   ██ ██ ██       ██  ██  ██             ██      ██  ██ ██    ██    ██    ██    ██ ██           ██
+    ██   ██ ███████    ██    ██   ██ ██ ███████   ████   ███████        ███████ ██   ████    ██    ██    ██    ██ ███████ ███████
+    */
+
+    describe('On the subject of creating entities, it, ', function() {
+        it('should return proper instance', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            let retrieved = em.getComponent(component1.constructor.name, entity1);
+
+            expect(retrieved).equal(component1);
+        });
+
+        it('should work with constructor name or instance', function() {
+            let entity1 = em.createEntity();
+
+            em.addComponent(component1, entity1);
+            let retrieved = em.getComponent(component1.constructor.name, entity1);
+            expect(retrieved).equal(component1);
+            retrieved = em.getComponent(component1, entity1);
+            expect(retrieved).equal(component1);
+        });
+
+    });
 });

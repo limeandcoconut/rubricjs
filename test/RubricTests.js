@@ -1,102 +1,114 @@
-const ava = require('ava').default;
-const Rubric = require('../src/Rubric.js').default;
-const InputAdapter = require('../src/InputAdapter.js').default;
+/* eslint-env mocha, es6 */
+/* eslint-disable no-unused-expressions */
+const Rubric = require(`../dist/Rubric.js`);
+const InputAdapter = require(`../dist/InputAdapter.js`);
+const expect = require('chai').expect;
 
-let config = {
-    engine: {},
-};
+describe('Rubric Class', function() {
 
-let rubric;
-let testAdapter;
-let flag;
+    let config = {
+        engine: {},
+    };
 
-class TestAdapter extends InputAdapter {
-    init() {
-        flag = 'yes';
-    }
-}
+    let rubric;
+    let testAdapter;
+    let flag;
 
-ava.beforeEach((/* test */) => {
-    rubric = new Rubric(config);
-    testAdapter = new TestAdapter();
-});
-
-/*
- ██████ ██████  ███████  █████  ████████ ███████
-██      ██   ██ ██      ██   ██    ██    ██
-██      ██████  █████   ███████    ██    █████
-██      ██   ██ ██      ██   ██    ██    ██
- ██████ ██   ██ ███████ ██   ██    ██    ███████
-*/
-
-ava('should result private variable engine', t => {
-    t.is(rubric.engine, undefined);
-});
-
-ava('should result in private Engine instance', t => {
-    let found = false;
-    /* eslint-disable no-undef */
-    let keys = Reflect.ownKeys(rubric);
-    /* eslint-enable no-undef */
-    keys.forEach((key) => {
-        if (typeof key === 'symbol') {
-            let privateData = rubric[key];
-            if (privateData.engine &&
-                privateData.engine.constructor &&
-                /powertrain/i.test(privateData.engine.constructor.name)
-            ) {
-                t.truthy(privateData.engine, 'start');
-                found = true;
-            }
+    class TestAdapter extends InputAdapter {
+        init() {
+            flag = 'yes';
         }
+    }
+
+    beforeEach(function() {
+        rubric = new Rubric(config);
+        testAdapter = new TestAdapter();
     });
-    t.true(found);
-});
 
-/*
-██ ███    ██ ██████  ██    ██ ████████  █████  ██████   █████  ██████  ████████ ███████ ██████  ███████
-██ ████   ██ ██   ██ ██    ██    ██    ██   ██ ██   ██ ██   ██ ██   ██    ██    ██      ██   ██ ██
-██ ██ ██  ██ ██████  ██    ██    ██    ███████ ██   ██ ███████ ██████     ██    █████   ██████  ███████
-██ ██  ██ ██ ██      ██    ██    ██    ██   ██ ██   ██ ██   ██ ██         ██    ██      ██   ██      ██
-██ ██   ████ ██       ██████     ██    ██   ██ ██████  ██   ██ ██         ██    ███████ ██   ██ ███████
-*/
+    /*
+     ██████ ██████  ███████  █████  ████████ ███████
+    ██      ██   ██ ██      ██   ██    ██    ██
+    ██      ██████  █████   ███████    ██    █████
+    ██      ██   ██ ██      ██   ██    ██    ██
+     ██████ ██   ██ ███████ ██   ██    ██    ███████
+    */
 
-ava('should throw if argument is not class instance of InputAdapter', test => {
-    test.throws(() => {
-        rubric.addInputAdapter('a');
-    }, TypeError);
-});
+    describe('On the subject of creating an instance, it ', function() {
 
-ava('should result in a map entry by constructor name', test => {
-    rubric.addInputAdapter(testAdapter);
+        it('should result private variable engine', function() {
+            expect(rubric.engine).to.be.undefined;
+        });
 
-    test.truthy(rubric, 'inputAdapters');
-    test.is(rubric.inputAdapters.size, 1);
-    test.is(rubric.inputAdapters.get(TestAdapter.name), testAdapter);
-});
+        it('should result in private Engine instance', function() {
+            let found = false;
+            let keys = Reflect.ownKeys(rubric);
+            keys.forEach((key) => {
+                if (typeof key === 'symbol') {
+                    let privateData = rubric[key];
+                    if (privateData.engine &&
+                        privateData.engine.constructor &&
+                        /powertrain/i.test(privateData.engine.constructor.name)
+                    ) {
+                        expect(privateData.engine).to.have.property('start');
+                        found = true;
+                    }
+                }
+            });
+            expect(found).to.be.true;
+        });
 
-ava('should alias primary adapter for ease', test => {
-    rubric.addPrimaryInputAdapter(testAdapter);
+    });
 
-    test.is(rubric.primaryInput, testAdapter);
-});
+    /*
+    ██ ███    ██ ██████  ██    ██ ████████  █████  ██████   █████  ██████  ████████ ███████ ██████  ███████
+    ██ ████   ██ ██   ██ ██    ██    ██    ██   ██ ██   ██ ██   ██ ██   ██    ██    ██      ██   ██ ██
+    ██ ██ ██  ██ ██████  ██    ██    ██    ███████ ██   ██ ███████ ██████     ██    █████   ██████  ███████
+    ██ ██  ██ ██ ██      ██    ██    ██    ██   ██ ██   ██ ██   ██ ██         ██    ██      ██   ██      ██
+    ██ ██   ████ ██       ██████     ██    ██   ██ ██████  ██   ██ ██         ██    ███████ ██   ██ ███████
+    */
 
-ava('should throw if argument is not class instance of InputAdapter', test => {
-    test.throws(() => {
-        rubric.addPrimaryInputAdapter('a');
-    }, TypeError);
-});
+    describe('On the subject of InputAdapters, it ', function() {
 
-ava('should result in a map entry by constructor name', test => {
-    rubric.addPrimaryInputAdapter(testAdapter);
+        it('should throw if argument is not class instance of InputAdapter', function() {
+            expect(() => {
+                rubric.addInputAdapter('a');
+            }).to.throw(TypeError, /input\s?adapter/i);
+        });
 
-    test.truthy(rubric.inputAdapters);
-    test.is(rubric.inputAdapters.size, 1);
-    test.is(rubric.inputAdapters.get(TestAdapter.name), testAdapter);
-});
+        it('should result in a map entry by constructor name', function() {
+            rubric.addInputAdapter(testAdapter);
 
-ava('should init all input adapters when init is called', test => {
-    rubric.addInputAdapter(testAdapter);
-    rubric.init();
-    test.is(flag, 'yes');
+            expect(rubric).to.have.property('inputAdapters');
+            expect(rubric.inputAdapters).to.have.property('size').equal(1);
+            expect(rubric.inputAdapters.get(TestAdapter.name)).to.equal(testAdapter);
+        });
+
+        it('should alias primary adapter for ease', function() {
+            rubric.addPrimaryInputAdapter(testAdapter);
+
+            expect(rubric.primaryInput).to.equal(testAdapter);
+        });
+
+        it('should throw if argument is not class instance of InputAdapter', function() {
+            expect(() => {
+                rubric.addPrimaryInputAdapter('a');
+            }).to.throw(TypeError, /input\s?adapter/i);
+        });
+
+        it('should result in a map entry by constructor name', function() {
+            rubric.addPrimaryInputAdapter(testAdapter);
+
+            expect(rubric.inputAdapters).ok;
+            expect(rubric.inputAdapters).to.have.property('size').equal(1);
+            expect(rubric.inputAdapters.get(TestAdapter.name)).equal(testAdapter);
+        });
+
+        it('should init all input adapters when init is called', function() {
+            rubric.addInputAdapter(testAdapter);
+            rubric.init();
+            expect(flag).to.equal('yes');
+        });
+
+    });
+
 });

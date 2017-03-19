@@ -1,29 +1,34 @@
-const ava = require('ava').default;
-const InputAdapter = require('../src/InputAdapter.js').default;
+/* eslint-env mocha, es6 */
+const InputAdapter = require(`../dist/InputAdapter.js`);
+const expect = require('chai').expect;
 
-ava('should throw if constructed manually', test => {
-    test.throws(() => {
-        /* eslint-disable no-new */
-        new InputAdapter();
-    }, /input\s?adapter/i);
-});
+describe('On the subject of the InputAdapter class, it, ', function() {
 
-ava('should throw if init is not overridden', test => {
-    class Foo extends InputAdapter {
-    }
+    it('should throw if constructed manually', function() {
+        expect(() => {
+            /* eslint-disable no-new */
+            new InputAdapter();
+        }).to.throw(Error, /input\s?adapter/i);
+    });
 
-    test.throws(() => {
-        new Foo();
-    }, /input\s?adapter/i);
-});
-
-ava('should construct properlly if method is overridden', test => {
-    class Bar extends InputAdapter {
-        init() {
+    it('should throw if init is not overridden', function() {
+        class Foo extends InputAdapter {
         }
-    }
 
-    test.notThrows(() => {
-        new Bar();
-    }, /input\s?adapter/i);
+        expect(() => {
+            new Foo();
+        }).to.throw(Error, /input\s?adapter/i);
+    });
+
+    it('should construct properlly if method is overridden', function() {
+        class Bar extends InputAdapter {
+            init() {
+            }
+        }
+
+        expect(() => {
+            new Bar();
+        }).to.not.throw(Error, /input\s?adapter/i);
+    });
+
 });
