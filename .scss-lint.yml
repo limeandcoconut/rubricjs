@@ -1,0 +1,172 @@
+# scss_files: 'app/assets/stylesheets/**/*.css.scss'
+# exclude: 'app/assets/stylesheets/plugins/**'
+
+linters:
+    Comment:
+        allowed: '^[/ ]'
+    BorderZero:
+        enabled: false
+    LeadingZero:
+        style: include_zero
+    Shorthand:
+        enabled: false
+    BemDepth:
+        max_depth: 0
+    NestingDepth:
+        max_depth: 1
+        ignore_parent_selectors: true
+    SelectorDepth:
+        max_depth: 1
+    Indentation:
+        severity: error
+        character: spaces
+        width: 4
+    SelectorFormat:
+        severity: error
+        convention: hyphenated_BEM
+    # NameFormat:
+        # convention: kebab-case
+
+    PropertySortOrder:
+        order:
+            - content
+            - clear
+
+            - background
+            - background-image
+            - background-position
+            - background-repeat
+            - background-size
+            - background-color
+
+            - display
+
+            - float
+
+            - position
+            - top
+            - right
+            - bottom
+            - left
+
+            - columns
+            - column-gap
+            - column-fill
+            - column-rule
+            - column-span
+            - column-count
+            - column-width
+
+            - width
+            - height
+            - min-width
+            - max-width
+            - min-height
+            - max-height
+
+            - margin
+            - margin-top
+            - margin-right
+            - margin-bottom
+            - margin-left
+
+            - padding
+            - padding-top
+            - padding-right
+            - padding-bottom
+            - padding-left
+
+            - border
+            - border-top
+            - border-right
+            - border-bottom
+            - border-left
+            - border-width
+            - border-top-width
+            - border-right-width
+            - border-bottom-width
+            - border-left-width
+            - border-style
+            - border-top-style
+            - border-right-style
+            - border-bottom-style
+            - border-left-style
+            - border-radius
+            - border-top-left-radius
+            - border-top-right-radius
+            - border-bottom-left-radius
+            - border-bottom-right-radius
+            - border-color
+            - border-top-color
+            - border-right-color
+            - border-bottom-color
+            - border-left-color
+
+            - outline
+
+            - box-shadow
+
+            - font
+            - font-family
+            - font-size
+            - font-weight
+            - font-smoothing
+            - font-style
+            - line-height
+            - letter-spacing
+            - color
+            - text-align
+            - text-indent
+            - text-transform
+            - text-decoration
+            - text-rendering
+            - text-shadow
+            - text-overflow
+            - vertical-align
+            - white-space
+            - word-spacing
+
+            - transform
+            - transition
+
+            - animation
+            - animation-name
+            - animation-duration
+            - animation-timing-function
+            - animation-delay
+            - animation-iteration-count
+            - animation-direction
+            - animation-fill-mode
+            - animation-play-state
+
+            - visibility
+            - opacity
+            - z-index
+            - overflow
+            - cursor
+
+            - list-style
+            - caption-side
+            - table-layout
+            - border-collapse
+            - border-spacing
+            - empty-cells
+            - quotes
+            # - content
+            # - clear
+            # - background
+            # - display
+            # - position
+            # - height
+            # - width
+            # - margin
+            # - padding
+            # - border
+            # - outline
+            # - font-size
+            # - line-height
+            # - color
+            # - opacity
+            # - z-index
+            # - transform
+            # - transition

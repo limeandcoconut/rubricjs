@@ -11,5 +11,6 @@ webpack.config.js
 tests
 bin
 src
+out
 coverage
 node_modules

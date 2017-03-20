@@ -1,0 +1,9 @@
+{
+    "extends": "cleverly",
+    "rules": {
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}

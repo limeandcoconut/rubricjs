@@ -1,4 +1,23 @@
-export default class Timer {
+/* eslint-env es6 */
+/**
+ * A module for creating timers synchronized with Rubric's engine.
+ * @module
+ */
+
+/**
+ * Class for performing action synchronized with Rubric's engine.
+ */
+ // * @class Timer
+class Timer {
+
+    /**
+     * @constructor
+     * @param {object}      config      A config object containing optional onFirst, onLast, and onEach callbacks as
+     *                                  well as an optional syntax for duration.
+     * @param {object}      duration    The number of ticks that this timer should run for (relative to Rubric's
+     *                                  engine).
+     * @throws {TypeError}              Throws if any of the parameters are not of the expected types.
+     */
     constructor(config, duration) {
         if ((config.onFirst && typeof config.onFirst !== 'function') ||
             (config.onEach && typeof config.onEach !== 'function') ||
@@ -42,12 +61,12 @@ export default class Timer {
         }
 
         this.running = false;
-
-        // this.ownId = V.tm.registerTimer(this);
-        // console.log(this);
-
     }
 
+    /**
+     * Set the timer to running and if it has not been started yet call the onFirst callback if one was provided.
+     * @method start
+     */
     start() {
         if (this.ticks === this.duration && this.onFirst) {
             this.onFirst();
@@ -55,6 +74,11 @@ export default class Timer {
         this.running = true;
     }
 
+    /**
+     * Runs given user callbacks at the appropriate times for each tick of the Rubric engine. Adjusts the ticks property
+     * if and assigns it to the user provided context (if one was given)
+     * @method tick
+     */
     tick() {
         if (this.onEach) {
             this.onEach();
@@ -74,7 +98,13 @@ export default class Timer {
         }
     }
 
+    /**
+     * Stop the timer if it is running.
+     * @method pause
+     */
     pause() {
         this.running = false;
     }
 }
+
+module.exports = Timer;

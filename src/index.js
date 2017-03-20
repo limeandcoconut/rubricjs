@@ -1,10 +1,29 @@
-import Rubric from './Rubric';
-import System from './System';
-import InputAdapter from './InputAdapter';
-import EntityManager from './EntityManager';
-import EntityFactory from './EntityFactory';
-import Timer from './Timer';
-import TimerManager from './TimerManager';
+const Rubric = require('./Rubric.js');
+const System = require('./System.js');
+const InputAdapter = require('./InputAdapter.js');
+const EntityManager = require('./EntityManager.js');
+const EntityFactory = require('./EntityFactory.js');
+const Timer = require('./Timer.js');
+const TimerManager = require('./TimerManager.js');
 
-export {Rubric, System, InputAdapter, EntityManager, EntityFactory, Timer, TimerManager};
-export default Rubric;
+/**
+ * Export all of the core packages including the Rubric class.
+ * @module
+ * @exports {Rubric, System, InputAdapter, EntityManager, EntityFactory, Timer, TimerManager}
+ */
+module.exports = {
+    default: Rubric,
+    Rubric,
+    System,
+    InputAdapter,
+    EntityManager,
+    EntityFactory,
+    Timer,
+    TimerManager,
+};
+// /**
+//  * Export Rubric by default.
+//  * @module
+//  * @exports default Rubric
+//  */
+// export default Rubric;

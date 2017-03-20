@@ -8,14 +8,8 @@
     "test": "mocha test.js",
     "build": "babel src --out-dir dist --source-maps",
     "prepublish": "npm run build",
-    "coverage": "istanbul cover _mocha test.js",
-    "coverSrc": "istanbul cover _mocha coverSrc.js",
-    "//watchCoverage": "onchange 'src/*.js' 'test/*.js' -i -- npm run coverSrc",
-    "watchCoverage": "onchange 'src/*.js' 'test/*.js' -i -- npm run cowboyhat",
-    "t": ". ./bin/t.sh",
-    "cowboyhat": "node cowboyhat.js",
-    "ch": ". ./bin/cowboyhat.sh",
-    "nyc": "./node_modules/.bin/nyc ./node_modules/.bin/_mocha test.js"
+    "cowboy-hat": "node cowboy-hat.js",
+    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/_mocha test.js"
   },
   "repository": {
     "type": "git",
