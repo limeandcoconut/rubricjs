@@ -17,7 +17,7 @@ let systemRegistry = Symbol();
 * Class for managing Rubric.js systems.
 */
 // * @class SystemManager
-class SystemManager {
+module.exports = class SystemManager {
 
     /**
      * @constructor
@@ -92,6 +92,4 @@ class SystemManager {
     deleteAllSystems() {
         this[systemRegistry].clear();
     }
-}
-
-module.exports = SystemManager;
+};
