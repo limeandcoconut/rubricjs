@@ -308,7 +308,18 @@ describe('EntityManager Class', function() {
     ██   ██ ███████ ██      ██  ██████    ████   ███████
     */
 
-    describe('On the subject of removing entities, it, ', function() {
+    describe('On the subject of removing components, it, ', function() {
+
+        it('should return false when no component exists', function() {
+            let entity1 = em.createEntity();
+            expect(em.removeComponent(component1.constructor.name, entity1)).to.equal(false);
+        });
+
+        it('should return the removed component', function() {
+            let entity1 = em.createEntity();
+            em.addComponent(component1, entity1);
+            expect(em.removeComponent(component1.constructor.name, entity1)).to.equal(component1);
+        });
 
         it('should work with constructor name or instance', function() {
             let entity1 = em.createEntity();
@@ -370,7 +381,7 @@ describe('EntityManager Class', function() {
     ██   ██ ███████    ██    ██   ██ ██ ███████   ████   ███████        ███████ ██   ████    ██    ██    ██    ██ ███████ ███████
     */
 
-    describe('On the subject of creating entities, it, ', function() {
+    describe('On the subject of retrieving entities, it, ', function() {
         it('should return proper instance', function() {
             let entity1 = em.createEntity();
             em.addComponent(component1, entity1);

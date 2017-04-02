@@ -33,7 +33,7 @@ class EntityManager {
          * @private
          */
         this[entityIds] = [];
- 
+
         /**
          * Internal Map for storing Maps of components.
          * @private
@@ -102,7 +102,6 @@ class EntityManager {
         if (typeof componentName === 'object') {
             componentName = componentName.constructor.name;
         }
-
         if (typeof componentName !== 'string') {
             throw new TypeError('Unexpected value for component name');
         }
@@ -156,7 +155,8 @@ class EntityManager {
             return false;
         }
 
-        let component = componentsOfType.delete(entityId);
+        let component = componentsOfType.get(entityId);
+        componentsOfType.delete(entityId);
         return component;
     }
 
@@ -204,13 +204,14 @@ class EntityManager {
     /**
      * Returns a list of entites that each have all of the specified components
      * @method getEntitiesWithComponents
-     * @param  {string|object}      componentNames    The class name of the object to search for (or the object itself).
-     * @return {Array}                                An Array containing any entities that have the specified component.
+     * @param  {Array}          componentNames          An array of components or component names to search for.
+     * @return {Array}                                  An Array containing any entities that have the specified component.
      */
     getEntitiesWithComponents(componentNames) {
         if (!Array.isArray(componentNames)) {
             throw new TypeError('Argument is required to be an array');
         }
+        componentNames = componentNames.slice();
 
         let commonEntities = this.getEntitiesWithComponent(this.validateComonentName(componentNames[0]));
         componentNames.shift();
