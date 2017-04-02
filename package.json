@@ -1,8 +1,8 @@
 {
   "name": "rubricjs",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "An es6 component, entity, system, framework with a minimal core.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "webpack --watch",
     "test": "mocha test.js",
