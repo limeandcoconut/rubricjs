@@ -1,6 +1,6 @@
 {
   "name": "rubricjs",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "An es6 component, entity, system, framework with a minimal core.",
   "main": "dist/index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "chokidar": "^1.6.1",
     "extract-text-webpack-plugin": "^2.0.0-beta",
     "mkdirp": "^0.5.1",
+    "powertrain": "^1.0.4",
     "remap-istanbul": "^0.8.4",
     "replace-in-file": "^2.2.2"
   },
