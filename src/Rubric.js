@@ -3,16 +3,8 @@
  * A module for managing a game loop.
  * @module Rubric
  */
-// import Powertrain from 'powertrain';
-const Powertrain = require('powertrain').default;
-// import InputAdapter from './InputAdapter';
+const Powertrain = require('powertrain');
 const InputAdapter = require('./InputAdapter.js');
-// import EntityManager from './EntityManager';
-const EntityManager = require('./EntityManager.js');
-// import EntityFactory from './EntityFactory';
-const EntityFactory = require('./EntityFactory.js');
-// import TimerManager from './TimerManager';
-const TimerManager = require('./TimerManager.js');
 
 /**
  * Key for private data.
@@ -42,14 +34,13 @@ module.exports = class Rubric {
             engine: new Powertrain(config.engine),
         };
 
-        this.em = new EntityManager();
-        this.entityManager = this.em;
-        this.ef = new EntityFactory();
-        this.entityFactory = this.ef;
-        this.tm = new TimerManager();
-        this.timerManager = this.tm;
         this.inputAdapters = new Map();
         this.data = {};
+
+        /**
+         * Exposes start method of Powertrain to users.
+         */
+        this.start = this[privateKey].engine.start.bind(this[privateKey].engine);
     }
 
     /**
@@ -79,7 +70,29 @@ module.exports = class Rubric {
         this.inputAdapters.set(inputAdapter.constructor.name, inputAdapter);
     }
 
+    /**
+     * Calls init method on each input adapter.
+     * @method init
+     */
     init() {
         this.inputAdapters.forEach(value => value.init());
     }
-}
+
+    /**
+     * Sets update method.
+     * @method setUpdate
+     * @param  {Function}       fn      The function to be set as Rubric's engine's update method.
+     * @throws {Error}                  Throws if engine is running.
+     * @throws {TypeError}              Throws if the argument is not a function.
+     */
+    setUpdate(fn) {
+        let engine = this[privateKey].engine;
+        if (engine.running) {
+            throw new Error('Not allowed to override update method while Rubric is running');
+        } else if (typeof fn !== 'function') {
+            throw new TypeError('Argument must be a function');
+        }
+
+        engine.update = fn;
+    }
+};

@@ -13,6 +13,7 @@ describe('Rubric Class', function() {
     let rubric;
     let testAdapter;
     let flag;
+    let privateKey;
 
     class TestAdapter extends InputAdapter {
         init() {
@@ -23,6 +24,18 @@ describe('Rubric Class', function() {
     beforeEach(function() {
         rubric = new Rubric(config);
         testAdapter = new TestAdapter();
+
+        /* eslint-disable no-undef */
+        let keys = Reflect.ownKeys(rubric);
+        /* eslint-enable no-undef */
+        keys.forEach((key) => {
+            if (typeof key === 'symbol') {
+                let prop = rubric[key];
+                if (prop.constructor && prop.engine.constructor.name === 'Powertrain') {
+                    privateKey = key;
+                }
+            }
+        });
     });
 
     /*
@@ -111,4 +124,43 @@ describe('Rubric Class', function() {
 
     });
 
+    /*
+    ██    ██ ██████  ██████   █████  ████████ ███████
+    ██    ██ ██   ██ ██   ██ ██   ██    ██    ██
+    ██    ██ ██████  ██   ██ ███████    ██    █████
+    ██    ██ ██      ██   ██ ██   ██    ██    ██
+     ██████  ██      ██████  ██   ██    ██    ███████
+    */
+
+    describe('On the subject of the update method, it ', function() {
+
+        it('should throw if argument is not a function', function() {
+            expect(() => {
+                rubric.setUpdate('a');
+            }).to.throw(TypeError, /function/i);
+        });
+
+        it('should throw if rubric is already running', function() {
+            rubric.start();
+            expect(() => {
+                rubric.setUpdate(() => {});
+            }).to.throw(Error, /running/i);
+        });
+
+        it('should set method properly', function() {
+            let foo = () => {};
+            rubric.setUpdate(foo);
+
+            expect(rubric[privateKey].engine).to.have.property('update');
+        });
+
+        it('should override existing method', function() {
+            let foo = () => {};
+            rubric.setUpdate(foo);
+            let bar = () => {};
+            rubric.setUpdate(bar);
+
+            expect(rubric[privateKey].engine.update).to.equal(bar);
+        });
+    });
 });
