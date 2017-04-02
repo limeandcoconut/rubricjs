@@ -132,7 +132,7 @@ describe('TimerManager and Timer Classes', function() {
             expect(tm[registryKey].size).equal(1);
         });
 
-        it('should not return false if timer is not registered', function() {
+        it('should return false if timer is not registered', function() {
             expect(tm.removeTimer(new Timer({}, 1))).to.be.false;
         });
 

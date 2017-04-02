@@ -1,5 +1,7 @@
 const Rubric = require('./Rubric.js');
 const System = require('./System.js');
+const SubSystem = require('./SubSystem.js');
+const SystemManager = require('./SystemManager.js');
 const InputAdapter = require('./InputAdapter.js');
 const EntityManager = require('./EntityManager.js');
 const EntityFactory = require('./EntityFactory.js');
@@ -15,15 +17,11 @@ module.exports = {
     default: Rubric,
     Rubric,
     System,
+    SubSystem,
+    SystemManager,
     InputAdapter,
     EntityManager,
     EntityFactory,
     Timer,
     TimerManager,
 };
-// /**
-//  * Export Rubric by default.
-//  * @module
-//  * @exports default Rubric
-//  */
-// export default Rubric;
