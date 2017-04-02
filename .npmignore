@@ -4,6 +4,7 @@
 
 *.log
 npm_debug.*
+kruft.*
 
 test.js
 webpack.config.js

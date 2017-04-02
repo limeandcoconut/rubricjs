@@ -36,7 +36,6 @@
     "chokidar": "^1.6.1",
     "extract-text-webpack-plugin": "^2.0.0-beta",
     "mkdirp": "^0.5.1",
-    "powertrain": "^1.0.3",
     "remap-istanbul": "^0.8.4",
     "replace-in-file": "^2.2.2"
   },
