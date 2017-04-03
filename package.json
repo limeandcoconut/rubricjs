@@ -9,7 +9,8 @@
     "build": "babel src --out-dir dist --source-maps",
     "prepublish": "npm run build",
     "cowboy-hat": "node cowboy-hat.js",
-    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/_mocha test.js"
+    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/_mocha test.js",
+    "jsdoc": "./node_modules/.bin/jsdoc src"
   },
   "repository": {
     "type": "git",
