@@ -6,6 +6,10 @@ An es6 component, entity, system, framework with a minimal core. Rubric was desi
 
 Testing and dev are done with babel in es6.
 
+## Example
+There is a barebones 🍖 code example [here](https://github.com/limeandcoconut/rubric-example).
+The is a running demo [here](http://rubric.thejacobsmith.com/), which is pretty boring visually.
+
 ## How?
 
 Coming soon: 4/2/17

@@ -4,7 +4,7 @@
  * @module SubSystem
  */
 
-const System = require('./System.js');
+const System = require('./system.js');
 
 /**
  * Class for creating logical systems that depend on other systems.
@@ -81,6 +81,6 @@ class SubSystem extends System {
     clearQueue() {
         this.inputQueue = [];
     }
-};
+}
 
 module.exports = SubSystem;

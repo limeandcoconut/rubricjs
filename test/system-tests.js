@@ -1,7 +1,7 @@
 /* eslint-env mocha, es6 */
-const System = require(`../dist/System.js`);
-const SubSystem = require(`../dist/SubSystem.js`);
-const SystemManager = require(`../dist/SystemManager.js`);
+const System = require(`../dist/system.js`);
+const SubSystem = require(`../dist/sub-system.js`);
+const SystemManager = require(`../dist/system-manager.js`);
 const expect = require('chai').expect;
 
 describe('System and SubSystem Classes', function() {

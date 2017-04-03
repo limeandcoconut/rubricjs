@@ -1,5 +1,5 @@
 /* eslint-env mocha, es6 */
-const Timer = require(`../dist/Timer.js`);
+const Timer = require(`../dist/timer.js`);
 const expect = require('chai').expect;
 
 describe('Timer Class', function() {

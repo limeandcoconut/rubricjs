@@ -4,7 +4,7 @@
  * @module Rubric
  */
 const Powertrain = require('powertrain');
-const InputAdapter = require('./InputAdapter.js');
+const InputAdapter = require('./input-adapter.js');
 
 /**
  * Key for private data.

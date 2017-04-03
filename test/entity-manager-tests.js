@@ -1,5 +1,5 @@
 /* eslint-env mocha, es6 */
-const EntityManager = require(`../dist/EntityManager.js`);
+const EntityManager = require(`../dist/entity-manager.js`);
 const expect = require('chai').expect;
 const auid = require('alphastring');
 

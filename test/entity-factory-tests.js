@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-const EntityFactory = require(`../dist/EntityFactory.js`);
+const EntityFactory = require(`../dist/entity-factory.js`);
 const expect = require('chai').expect;
 
 let ef;

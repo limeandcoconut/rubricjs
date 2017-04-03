@@ -4,7 +4,7 @@
  * @module SystemManager
  */
 
-const System = require('./System.js');
+const System = require('./system.js');
 
 /**
  * Key for private registry.

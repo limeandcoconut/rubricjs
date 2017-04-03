@@ -1,12 +1,12 @@
-const Rubric = require('./Rubric.js');
-const System = require('./System.js');
-const SubSystem = require('./SubSystem.js');
-const SystemManager = require('./SystemManager.js');
-const InputAdapter = require('./InputAdapter.js');
-const EntityManager = require('./EntityManager.js');
-const EntityFactory = require('./EntityFactory.js');
-const Timer = require('./Timer.js');
-const TimerManager = require('./TimerManager.js');
+const Rubric = require('./rubric.js');
+const System = require('./system.js');
+const SubSystem = require('./sub-system.js');
+const SystemManager = require('./system-manager.js');
+const InputAdapter = require('./input-adapter.js');
+const EntityManager = require('./entity-manager.js');
+const EntityFactory = require('./entity-factory.js');
+const Timer = require('./timer.js');
+const TimerManager = require('./timer-manager.js');
 
 /**
  * Export all of the core packages including the Rubric class.
