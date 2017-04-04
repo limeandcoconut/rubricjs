@@ -2,21 +2,19 @@
 
 ## Rubric Underpins Better Reusability In Components
 
-An es6 component, entity, system, framework with a minimal core. Rubric was designed with a verbose syntax and naming scheme that focuses on ease of use and clarity. This standpoint was largely inspired by Douglas Crockford's comment to the effect that code is meant to be read by humans and incidentally run by machines.
+An es6 component, entity, system, framework with a minimal core. Rubric was designed with a verbose syntax and naming scheme that focuses on ease of use and clarity. This standpoint was largely inspired by Douglas Crockford's comment to the effect that code is meant to be "read by humans and incidentally run by machines".
 
-Testing and dev are done with babel in es6.
+It relies on [Powertrain](https://github.com/limeandcoconut/powertrain) for its' engine and uses babel and mocha in dev.
 
 ## Example
 There is a barebones 🍖 code example [here](https://github.com/limeandcoconut/rubric-example).
-The is a running demo [here](http://rubric.thejacobsmith.com/), which is pretty boring visually.
+The is a running  demo [here](http://rubric.thejacobsmith.com/), which is pretty boring visually.
 
-## How?
+## Docs
 
-Coming soon: 4/2/17
+There is a small jsdoc site [here](http://docs.thejacobsmith.com/module-EntityManager.html).
 
-## API
-
-Coming soon: 4/2/17
+Better documentation will be coming to the readme _very_ soon. 4/4/17
 
 ```js
 // Examples to follow shortly
@@ -24,11 +22,34 @@ Coming soon: 4/2/17
 
 ## Config File
 
-Coming soon: 4/2/17
+```js
+module.exports = {
+    // A useful way to pass things in to input adapters and other utilities
+    // In the example implementation mentioned above these keys will have preventDefault() called when they are pressed
+    preventKeys: ['up', 'down', 'space', 'left', 'right'],
+    // These options will all be passed to Rubric's core engine, Powertrain
+    engine: {
+        playspeed: 1,
+        fps: 60,
+    },
+    // More on this coming soon 4/4/17
+};
+
+```
 
 ## Testing Rubric
 
-Coming soon: 4/2/17
+coming 4/5/17
+
+#### Feedback 🗒
+It is greatly appreciated! 🎉
+Please hit me up, I'd love to hear what you have to say!
+
+[messagethesmith@gmail.com](messagethesmith@gmail.com)
+[https://github.com/limeandcoconut](https://github.com/limeandcoconut)
+[@limeandcoconut](https://twitter.com/limeandcoconut)
+
+Cheers!
 
 ## TODO:
 

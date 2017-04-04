@@ -5,6 +5,8 @@
 npm_debug.*
 kruft.*
 
+app.js
+
 dist
 out
 coverage
