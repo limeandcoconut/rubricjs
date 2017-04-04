@@ -1,6 +1,6 @@
 {
   "name": "rubricjs",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "An es6 component, entity, system, framework with a minimal core.",
   "main": "dist/index.js",
   "scripts": {
