@@ -4,11 +4,11 @@
 
 An es6 component, entity, system, framework with a minimal core. Rubric was designed with a verbose syntax and naming scheme that focuses on ease of use and clarity. This standpoint was largely inspired by Douglas Crockford's comment to the effect that code is meant to be "read by humans and incidentally run by machines".
 
-It relies on [Powertrain](https://github.com/limeandcoconut/powertrain) for its' engine and uses babel and mocha in dev.
+It relies on [powertrain](https://www.npmjs.com/package/powertrain) for its' engine and uses babel and mocha in dev.
 
 ## Example
-There is a barebones 🍖 code example [here](https://github.com/limeandcoconut/rubric-example).
-The is a running  demo [here](http://rubric.thejacobsmith.com/), which is pretty boring visually.
+There is a barebones 🍖  code example [here](https://github.com/limeandcoconut/rubric-example).
+The is a running demo of it [here](http://rubric.thejacobsmith.com/), which is pretty boring visually.
 
 ## Docs
 
@@ -39,14 +39,36 @@ module.exports = {
 
 ## Testing Rubric
 
-coming 4/5/17
+Testing is done with mocha and chai.
 
-#### Feedback 🗒
+```bash
+$ npm run test
+```
+
+All tests are written against babel compiled output in the `/dist` directory.
+
+Code coverage with nyc.
+
+```bash
+$ npm run coverage
+```
+
+Quick `lcov.info` generation for line highlighting in your editor via [cowboy-hat](https://www.npmjs.com/package/cowboy-hat).
+
+```bash
+$ npm run cowboy-hat
+```
+
+This will watch for file changes and generate lcovs against `/src` for relatively fast coverage line highlighting updates.
+
+## Feedback ✉️
 It is greatly appreciated! 🎉
 Please hit me up, I'd love to hear what you have to say!
 
 [messagethesmith@gmail.com](messagethesmith@gmail.com)
+
 [https://github.com/limeandcoconut](https://github.com/limeandcoconut)
+
 [@limeandcoconut](https://twitter.com/limeandcoconut)
 
 Cheers!

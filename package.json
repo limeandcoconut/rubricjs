@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack --watch",
-    "test": "mocha test.js",
+    "test": "mocha test.js --reporter=nyan",
     "build": "babel src --out-dir dist --source-maps",
     "prepublish": "npm run build",
     "cowboy-hat": "node cowboy-hat.js",
