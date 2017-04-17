@@ -1,7 +1,7 @@
 /* eslint-env mocha, es6 */
 /* eslint-disable no-unused-expressions */
-const Timer = require(`../dist/timer.js`);
-const TimerManager = require(`../dist/timer-manager.js`);
+const Timer = require('../dist/timer.js');
+const TimerManager = require('../dist/timer-manager.js');
 const expect = require('chai').expect;
 
 describe('TimerManager and Timer Classes', function() {

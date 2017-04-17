@@ -1,6 +1,6 @@
 /* eslint-env mocha, es6 */
 /* eslint-disable no-unused-expressions */
-const Rubric = require(`../dist/rubric.js`);
+const Rubric = require('../dist/rubric.js');
 const InputAdapter = require(`../dist/input-adapter.js`);
 const expect = require('chai').expect;
 

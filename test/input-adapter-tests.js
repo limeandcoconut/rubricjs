@@ -1,5 +1,5 @@
 /* eslint-env mocha, es6 */
-const InputAdapter = require(`../dist/input-adapter.js`);
+const InputAdapter = require('../dist/input-adapter.js');
 const expect = require('chai').expect;
 
 describe('On the subject of the InputAdapter class, it, ', function() {
