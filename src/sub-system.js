@@ -4,7 +4,7 @@
  * @module SubSystem
  */
 
-const System = require('./system.js');
+const System = require('./system.js')
 
 /**
  * Class for creating logical systems that depend on other systems.
@@ -21,11 +21,11 @@ class SubSystem extends System {
      *                                                      the user.
      */
     constructor() {
-        super();
+        super()
 
-        this.inputQueue = [];
+        this.inputQueue = []
 
-        let userUpdate = this.update;
+        let userUpdate = this.update
 
         /**
          * Wrapper for user set update method. This ensures that events will be pulled from a publisher System
@@ -37,12 +37,12 @@ class SubSystem extends System {
          */
         this.update = () => {
             if (this.publisher) {
-                this.inputQueue = this.publisher.events.slice();
+                this.inputQueue = this.publisher.events.slice()
             } else if (this.inputQueue.length) {
-                this.inputQueue = [];
+                this.inputQueue = []
             }
 
-            return userUpdate.call(this, arguments);
+            return userUpdate.call(this, arguments)
         };
     }
 
@@ -60,10 +60,10 @@ class SubSystem extends System {
      */
     subscribe(system) {
         if (!(system instanceof System)) {
-            throw new TypeError('Argument must be instance of class System');
+            throw new TypeError('Argument must be instance of class System')
         }
 
-        this.publisher = system;
+        this.publisher = system
     }
 
     /**
@@ -71,7 +71,7 @@ class SubSystem extends System {
      * @method unsubscribe
      */
     unsubscribe() {
-        this.publisher = null;
+        this.publisher = null
     }
 
     /**
@@ -79,8 +79,8 @@ class SubSystem extends System {
      * @method clearQueue
      */
     clearQueue() {
-        this.inputQueue = [];
+        this.inputQueue = []
     }
 }
 
-module.exports = SubSystem;
+module.exports = SubSystem

@@ -9,7 +9,7 @@
  * @type {Symbol}
  * @private
  */
-let registryKey = Symbol('Entity Factory registry key');
+let registryKey = Symbol('Entity Factory registry key')
 
 /**
  * Class for managing entity constructor functions.
@@ -25,7 +25,7 @@ class EntityFactory {
          * Internal Map for storing entity constructors.
          * @private
          */
-        this[registryKey] = new Map();
+        this[registryKey] = new Map()
     }
 
     /**
@@ -38,10 +38,10 @@ class EntityFactory {
     registerConstructor(entityName, entityConstructor) {
         if (typeof entityName !== 'string' || typeof entityConstructor !== 'function') {
             throw new TypeError(`Parameters must be types string, function.
-                ${typeof entityName}, ${typeof entityConstructor} given.`);
+                ${typeof entityName}, ${typeof entityConstructor} given.`)
         }
-        entityName = entityName.charAt(0).toUpperCase() + entityName.slice(1);
-        this[registryKey].set(entityName, entityConstructor);
+        entityName = entityName.charAt(0).toUpperCase() + entityName.slice(1)
+        this[registryKey].set(entityName, entityConstructor)
     }
 }
 
@@ -59,30 +59,30 @@ let facoryHelper = {
      *                           otherwise, a function from the Map of constructor functions.
      */
     get: function(target, key) {
-        let matches;
-        let entityName;
+        let matches
+        let entityName
         if (typeof key !== 'string') {
-            return target[key];
+            return target[key]
         }
 
-        matches = key.match(/^create((?:[A-Z][a-z]*)+)$/);
-        entityName = matches ? matches[1] : null;
+        matches = key.match(/^create((?:[A-Z][a-z]*)+)$/)
+        entityName = matches ? matches[1] : null
 
         if (!entityName) {
-            return target[key];
+            return target[key]
         }
 
-        const originalMethod = target[registryKey].get(entityName);
+        const originalMethod = target[registryKey].get(entityName)
 
         if (typeof originalMethod !== 'function') {
-            return undefined;
+            return undefined
         }
 
         return function(...args) {
-            return originalMethod.apply(this, args);
+            return originalMethod.apply(this, args)
         };
     },
-};
+}
 
 /**
  * The helper object for the Proxy that traps construct calls to EntityFactory
@@ -97,11 +97,11 @@ let constructHelper = {
      * @return {Proxy}                    A Proxy designed to trap property access on a new EntityFactory
      */
     construct: function(target, argumentList/* , newTarget */) {
-        return new Proxy(new EntityFactory(argumentList), facoryHelper);
+        return new Proxy(new EntityFactory(argumentList), facoryHelper)
     },
-};
+}
 
 /**
  * Exports a Proxy to trap EntityFactory constructor.
  */
-module.exports = new Proxy(EntityFactory, constructHelper);
+module.exports = new Proxy(EntityFactory, constructHelper)

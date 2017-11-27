@@ -3,15 +3,15 @@
  * A module for managing a game loop.
  * @module Rubric
  */
-const Powertrain = require('powertrain');
-const InputAdapter = require('./input-adapter.js');
+const Powertrain = require('powertrain')
+const InputAdapter = require('./input-adapter.js')
 
 /**
  * Key for private data.
  * @type {Symbol}
  * @private
  */
-let privateKey = Symbol('Rubric class private data key');
+let privateKey = Symbol('Rubric class private data key')
 
 /**
  * Class for managing engine, input and systems.
@@ -32,15 +32,15 @@ module.exports = class Rubric {
          */
         this[privateKey] = {
             engine: new Powertrain(config.engine),
-        };
+        }
 
-        this.inputAdapters = new Map();
-        this.data = {};
+        this.inputAdapters = new Map()
+        this.data = {}
 
         /**
          * Exposes start method of Powertrain to users.
          */
-        this.start = this[privateKey].engine.start.bind(this[privateKey].engine);
+        this.start = this[privateKey].engine.start.bind(this[privateKey].engine)
     }
 
     /**
@@ -50,10 +50,10 @@ module.exports = class Rubric {
      */
     addInputAdapter(inputAdapter) {
         if (!(inputAdapter instanceof InputAdapter)) {
-            throw new TypeError('Must be instance of InputAdapter');
+            throw new TypeError('Must be instance of InputAdapter')
         }
 
-        this.inputAdapters.set(inputAdapter.constructor.name, inputAdapter);
+        this.inputAdapters.set(inputAdapter.constructor.name, inputAdapter)
     }
 
     /**
@@ -63,11 +63,11 @@ module.exports = class Rubric {
      */
     addPrimaryInputAdapter(inputAdapter) {
         if (!(inputAdapter instanceof InputAdapter)) {
-            throw new TypeError('Must be instance of InputAdapter');
+            throw new TypeError('Must be instance of InputAdapter')
         }
 
-        this.primaryInput = inputAdapter;
-        this.inputAdapters.set(inputAdapter.constructor.name, inputAdapter);
+        this.primaryInput = inputAdapter
+        this.inputAdapters.set(inputAdapter.constructor.name, inputAdapter)
     }
 
     /**
@@ -75,7 +75,7 @@ module.exports = class Rubric {
      * @method init
      */
     init() {
-        this.inputAdapters.forEach(value => value.init());
+        this.inputAdapters.forEach(value => value.init())
     }
 
     /**
@@ -108,7 +108,7 @@ module.exports = class Rubric {
         if (engine.running) {
             throw new Error('Not allowed to override render method while Rubric is running')
         } else if (typeof fn !== 'function') {
-            throw new TypeError('Argument must be a function');
+            throw new TypeError('Argument must be a function')
         }
 
         engine.render = fn

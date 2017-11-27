@@ -4,13 +4,13 @@
  * @module System
  */
 
-const AbstractConstructError = require('abstract-class-error').default;
+const AbstractConstructError = require('abstract-class-error').default
 
 /**
  * Class for creating logical system that update on each tick of the Rubric engine.
  * @abstract
  */
- // * @class System
+// * @class System
 module.exports = class System {
 
     /**
@@ -21,16 +21,16 @@ module.exports = class System {
      */
     constructor() {
         if (new.target === System) {
-            throw new AbstractConstructError('Cannot construct class System instances directly');
+            throw new AbstractConstructError('Cannot construct class System instances directly')
         }
 
         if (this.update === System.prototype.update) {
-            throw new AbstractConstructError('Method "update" must be overridden in class System');
+            throw new AbstractConstructError('Method "update" must be overridden in class System')
         }
 
-        this.events = [];
+        this.events = []
 
-        let userUpdate = this.update;
+        let userUpdate = this.update
 
         /**
          * Wrapper for user set update method. This ensures that events will be cleared before running user logic.
@@ -40,10 +40,10 @@ module.exports = class System {
          *                                                      use for systems.
          */
         this.update = () => {
-            this.clearEvents();
+            this.clearEvents()
 
-            return userUpdate.call(this, arguments);
-        };
+            return userUpdate.call(this, arguments)
+        }
     }
 
     /**
@@ -62,9 +62,10 @@ module.exports = class System {
     /**
      * Push event to internal list for subscribers to observe.
      * @method publish
+     * @param   {*} event   Typeically an object with event data.
      */
     publish(event) {
-        this.events.push(event);
+        this.events.push(event)
     }
 
     /**
@@ -72,6 +73,6 @@ module.exports = class System {
      * @method clearEvents
      */
     clearEvents() {
-        this.events = [];
+        this.events = []
     }
-};
+}

@@ -9,7 +9,7 @@
  * @type {Symbol}
  * @private
  */
-let registryKey = Symbol('Timer Manager registry key');
+let registryKey = Symbol('Timer Manager registry key')
 
 /**
  * Class for managing entitiy constructor functions.
@@ -22,12 +22,12 @@ class TimerManager {
      */
     constructor() {
         // FIXME: Generate uids
-        this.lowestFreeId = 10;
+        this.lowestFreeId = 10
         /**
          * Internal private Map for storing timers.
          * @private
          */
-        this[registryKey] = new Map();
+        this[registryKey] = new Map()
     }
 
     /**
@@ -40,19 +40,19 @@ class TimerManager {
         // FIXME: Id incrementing shouldn't be separated from registration. Currently id's can be consumed without
         // getting  used.
         if (this.lowestFreeId < this.maxId) {
-            let id = this.lowestFreeId;
-            this.lowestFreeId += 1;
-            return id;
+            let id = this.lowestFreeId
+            this.lowestFreeId += 1
+            return id
         }
 
-        let timerRegistry = this[registryKey];
+        let timerRegistry = this[registryKey]
         for (let i = 0, iLen = this.maxId; i < iLen; i++) {
             if (!timerRegistry.has(i)) {
-                return i;
+                return i
             }
         }
 
-        throw new RangeError('Maximum timer ids registered, approaching unsafe value');
+        throw new RangeError('Maximum timer ids registered, approaching unsafe value')
     }
 
     /**
@@ -64,18 +64,18 @@ class TimerManager {
      */
     registerTimer(timer) {
         if (!timer.constructor || timer.constructor.name !== 'Timer') {
-            throw new TypeError('Argument must be instance of class Timer');
+            throw new TypeError('Argument must be instance of class Timer')
         }
 
-        let timerRegistry = this[registryKey];
+        let timerRegistry = this[registryKey]
         if (timer.id && timerRegistry.has(timer.id)) {
-            return timer.id;
+            return timer.id
         }
 
-        let id = this.getNewId();
-        timerRegistry.set(id, timer);
-        timer.id = id;
-        return id;
+        let id = this.getNewId()
+        timerRegistry.set(id, timer)
+        timer.id = id
+        return id
     }
 
     /**
@@ -88,20 +88,20 @@ class TimerManager {
     removeTimer(timerId) {
         if (typeof timerId === 'object') {
             if (timerId.constructor.name !== 'Timer') {
-                throw new TypeError('Argument of type object must be instance of class Timer');
+                throw new TypeError('Argument of type object must be instance of class Timer')
             }
 
-            timerId = timerId.id;
+            timerId = timerId.id
         }
 
-        let registry = this[registryKey];
+        let registry = this[registryKey]
 
         if (registry.has(timerId)) {
-            registry.delete(timerId);
-            return timerId;
+            registry.delete(timerId)
+            return timerId
         }
 
-        return false;
+        return false
     }
 
     /**
@@ -109,7 +109,7 @@ class TimerManager {
      * @method removeAllTimers
      */
     removeAllTimers() {
-        this[registryKey] = new Map();
+        this[registryKey] = new Map()
     }
 
     /**
@@ -121,18 +121,18 @@ class TimerManager {
     getTimer(timerId) {
         if (typeof timerId === 'object') {
 
-            timerId = timerId.id;
+            timerId = timerId.id
             if (typeof timerId === 'undefined') {
-                return false;
+                return false
             }
         }
 
-        let registry = this[registryKey];
+        let registry = this[registryKey]
         if (registry.has(timerId)) {
-            return registry.get(timerId);
+            return registry.get(timerId)
         }
 
-        return false;
+        return false
     }
 
     /**
@@ -142,9 +142,9 @@ class TimerManager {
     tick() {
         this[registryKey].forEach((timer, id) => {
             if (timer.running) {
-                timer.tick();
+                timer.tick()
             }
-        });
+        })
     }
 }
 
@@ -154,6 +154,6 @@ class TimerManager {
  * @static
  * @memberOf TimerManager
  */
-TimerManager.prototype.maxId = Number.MAX_SAFE_INTEGER;
+TimerManager.prototype.maxId = Number.MAX_SAFE_INTEGER
 
-module.exports = TimerManager;
+module.exports = TimerManager

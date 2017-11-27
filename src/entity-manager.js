@@ -9,13 +9,13 @@
  * @type {Symbol}
  * @private
  */
-let componentRegistry = Symbol();
+let componentRegistry = Symbol()
 /**
  * Key for private a uid Array.
  * @type {Symbol}
  * @private
  */
-let entityIds = Symbol();
+let entityIds = Symbol()
 
 /**
 * Class for managing entities and components.
@@ -27,18 +27,18 @@ class EntityManager {
      * @constructor
      */
     constructor() {
-        this.lowestFreeId = 10;
+        this.lowestFreeId = 10
         /**
          * Internal Array for storing uids.
          * @private
          */
-        this[entityIds] = [];
+        this[entityIds] = []
 
         /**
          * Internal Map for storing Maps of components.
          * @private
          */
-        this[componentRegistry] = new Map();
+        this[componentRegistry] = new Map()
     }
 
     /**
@@ -49,19 +49,19 @@ class EntityManager {
      */
     getNewId() {
         if (this.lowestFreeId < this.maxId) {
-            let id = this.lowestFreeId;
-            this.lowestFreeId += 1;
-            return id;
+            let id = this.lowestFreeId
+            this.lowestFreeId += 1
+            return id
         }
 
-        let ids = this[entityIds];
+        let ids = this[entityIds]
         for (let i = 0, iLen = this.maxId; i < iLen; i++) {
             if (ids.indexOf(i) === -1) {
-                return i;
+                return i
             }
         }
 
-        throw new RangeError('Maximum entity ids registered, approaching unsafe value');
+        throw new RangeError('Maximum entity ids registered, approaching unsafe value')
     }
 
     /**
@@ -70,9 +70,9 @@ class EntityManager {
      * @return {number}       A unique id number representing an entity
      */
     createEntity() {
-        let id = this.getNewId();
-        this[entityIds].push(id);
-        return id;
+        let id = this.getNewId()
+        this[entityIds].push(id)
+        return id
     }
 
     /**
@@ -82,10 +82,10 @@ class EntityManager {
      */
     deleteEntity(entityId) {
         this[componentRegistry].forEach((componentsOfType/* , componentName */) => {
-            componentsOfType.delete(entityId);
-        });
+            componentsOfType.delete(entityId)
+        })
 
-        this[entityIds].splice(this[entityIds].indexOf(entityId), 1);
+        this[entityIds].splice(this[entityIds].indexOf(entityId), 1)
     }
 
     /**
@@ -100,13 +100,13 @@ class EntityManager {
      */
     validateComonentName(componentName) {
         if (typeof componentName === 'object') {
-            componentName = componentName.constructor.name;
+            componentName = componentName.constructor.name
         }
         if (typeof componentName !== 'string') {
-            throw new TypeError('Unexpected value for component name');
+            throw new TypeError('Unexpected value for component name')
         }
 
-        return componentName;
+        return componentName
     }
 
     /**
@@ -116,14 +116,14 @@ class EntityManager {
      * @return {Map}                      A map containing any components of specified class (or a new, empty, map).
      */
     getComponentsByType(componentName) {
-        let componentsOfType = this[componentRegistry].get(componentName);
+        let componentsOfType = this[componentRegistry].get(componentName)
 
         if (typeof componentsOfType === 'undefined') {
-            componentsOfType = new Map();
-            this[componentRegistry].set(componentName, componentsOfType);
+            componentsOfType = new Map()
+            this[componentRegistry].set(componentName, componentsOfType)
         }
 
-        return componentsOfType;
+        return componentsOfType
     }
 
     /**
@@ -134,10 +134,10 @@ class EntityManager {
      * @return {object}                   The component passed.
      */
     addComponent(component, entityId) {
-        let componentName = this.validateComonentName(component);
-        let componentsOfType = this.getComponentsByType(componentName);
-        componentsOfType.set(entityId, component);
-        return component;
+        let componentName = this.validateComonentName(component)
+        let componentsOfType = this.getComponentsByType(componentName)
+        componentsOfType.set(entityId, component)
+        return component
     }
 
     /**
@@ -148,16 +148,16 @@ class EntityManager {
      * @return {object|boolean}                   The object removed or false if nothing is found.
      */
     removeComponent(componentName, entityId) {
-        componentName = this.validateComonentName(componentName);
-        let componentsOfType = this[componentRegistry].get(componentName);
+        componentName = this.validateComonentName(componentName)
+        let componentsOfType = this[componentRegistry].get(componentName)
 
         if (typeof componentsOfType === 'undefined' || !componentsOfType.has(entityId)) {
-            return false;
+            return false
         }
 
-        let component = componentsOfType.get(entityId);
-        componentsOfType.delete(entityId);
-        return component;
+        let component = componentsOfType.get(entityId)
+        componentsOfType.delete(entityId)
+        return component
     }
 
     /**
@@ -168,9 +168,9 @@ class EntityManager {
      * @return {object|undefined}                     The object stored or undefined if nothing is found.
      */
     getComponent(componentName, entityId) {
-        componentName = this.validateComonentName(componentName);
-        let componentsOfType = this.getComponentsByType(componentName);
-        return componentsOfType.get(entityId);
+        componentName = this.validateComonentName(componentName)
+        let componentsOfType = this.getComponentsByType(componentName)
+        return componentsOfType.get(entityId)
     }
 
     /**
@@ -180,25 +180,25 @@ class EntityManager {
      * @return {Array}                                An Array containing any entities that have the specified component.
      */
     getEntitiesWithComponent(componentName) {
-        componentName = this.validateComonentName(componentName);
-        let componentsOfType = this.getComponentsByType(componentName);
+        componentName = this.validateComonentName(componentName)
+        let componentsOfType = this.getComponentsByType(componentName)
 
-        let foundEntities = [];
+        let foundEntities = []
 
         // TODO: Perf this to see if returning early is notably faster than allowing a forEach to fail on an empty map
         if (!componentsOfType.size) {
-            return foundEntities;
+            return foundEntities
         }
 
-        let keys = componentsOfType.keys();
-        let key = keys.next().value;
+        let keys = componentsOfType.keys()
+        let key = keys.next().value
 
         while (typeof key !== 'undefined') {
-            foundEntities.push(Number(key));
-            key = keys.next().value;
+            foundEntities.push(Number(key))
+            key = keys.next().value
         }
 
-        return foundEntities;
+        return foundEntities
     }
 
     /**
@@ -209,31 +209,31 @@ class EntityManager {
      */
     getEntitiesWithComponents(componentNames) {
         if (!Array.isArray(componentNames)) {
-            throw new TypeError('Argument is required to be an array');
+            throw new TypeError('Argument is required to be an array')
         }
-        componentNames = componentNames.slice();
+        componentNames = componentNames.slice()
 
-        let commonEntities = this.getEntitiesWithComponent(this.validateComonentName(componentNames[0]));
-        componentNames.shift();
+        let commonEntities = this.getEntitiesWithComponent(this.validateComonentName(componentNames[0]))
+        componentNames.shift()
 
         if (!commonEntities.length) {
-            return commonEntities;
+            return commonEntities
         }
 
         // TODO: Perf this similariliy to above perf
         componentNames.some((componentName) => {
-            componentName = this.validateComonentName(componentName);
-            let entitiesWithComponent = this.getEntitiesWithComponent(componentName);
+            componentName = this.validateComonentName(componentName)
+            let entitiesWithComponent = this.getEntitiesWithComponent(componentName)
 
-            commonEntities = commonEntities.filter(entity => entitiesWithComponent.indexOf(entity) !== -1);
+            commonEntities = commonEntities.filter(entity => entitiesWithComponent.indexOf(entity) !== -1)
 
             if (!commonEntities.length) {
-                return [];
+                return []
             }
-            return false;
-        });
+            return false
+        })
 
-        return commonEntities;
+        return commonEntities
     }
 
     /**
@@ -243,7 +243,7 @@ class EntityManager {
      */
     getAllEntities() {
         // Spread operator duplicates array here
-        return [...this[entityIds]];
+        return [...this[entityIds]]
     }
 
     /**
@@ -252,8 +252,8 @@ class EntityManager {
      */
     deleteAllEntities() {
         // Consider switch to this[entityIds].forEach(id => this.deleteEntity());
-        this[entityIds] = [];
-        this[componentRegistry].clear();
+        this[entityIds] = []
+        this[componentRegistry].clear()
     }
 }
 
@@ -263,6 +263,6 @@ class EntityManager {
  * @static
  * @memberOf EntityManager
  */
-EntityManager.prototype.maxId = Number.MAX_SAFE_INTEGER;
+EntityManager.prototype.maxId = Number.MAX_SAFE_INTEGER
 
-module.exports = EntityManager;
+module.exports = EntityManager

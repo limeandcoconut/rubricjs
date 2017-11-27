@@ -3,7 +3,7 @@
  * @module InputAdapter
  */
 
-let AbstractConstructError = require('abstract-class-error').default;
+let AbstractConstructError = require('abstract-class-error').default
 
 /**
  * Abstract Class representing an adapter for providing input to Rubric
@@ -18,11 +18,11 @@ module.exports = class InputAdapter {
      */
     constructor() {
         if (new.target === InputAdapter) {
-            throw new AbstractConstructError('Cannot construct class InputAdapter instances directly');
+            throw new AbstractConstructError('Cannot construct class InputAdapter instances directly')
         }
 
         if (this.init === InputAdapter.prototype.init) {
-            throw new AbstractConstructError('Method "init" must be overridden in class InputAdapter');
+            throw new AbstractConstructError('Method "init" must be overridden in class InputAdapter')
         }
     }
 
@@ -33,4 +33,4 @@ module.exports = class InputAdapter {
      */
     init() {
     }
-};
+}

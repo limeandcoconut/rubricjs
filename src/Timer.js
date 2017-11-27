@@ -7,7 +7,7 @@
 /**
  * Class for performing action synchronized with Rubric's engine.
  */
- // * @class Timer
+// * @class Timer
 class Timer {
 
     /**
@@ -22,45 +22,45 @@ class Timer {
         if ((config.onFirst && typeof config.onFirst !== 'function') ||
             (config.onEach && typeof config.onEach !== 'function') ||
             (config.onLast && typeof config.onLast !== 'function')) {
-            throw new TypeError('Timer configuration functions "onEach", "onFirst", and "onLast" must be functions');
+            throw new TypeError('Timer configuration functions "onEach", "onFirst", and "onLast" must be functions')
         }
 
-        this.duration = (typeof duration === 'number') ? duration : config.duration;
+        this.duration = (typeof duration === 'number') ? duration : config.duration
 
         if (typeof this.duration !== 'number') {
-            throw new TypeError('Duration is required');
+            throw new TypeError('Duration is required')
         }
 
-        this.ticks = this.duration;
+        this.ticks = this.duration
 
         if (config.context && typeof config.context === 'object') {
-            let context = config.context;
-            context.ticks = this.duration;
+            let context = config.context
+            context.ticks = this.duration
 
             if (config.onEach) {
                 this.onEach = () => {
-                    config.onEach.apply(context);
-                };
+                    config.onEach.apply(context)
+                }
             }
             if (config.onFirst) {
                 this.onFirst = () => {
-                    config.onFirst.apply(context);
-                };
+                    config.onFirst.apply(context)
+                }
             }
             if (config.onLast) {
                 this.onLast = () => {
-                    config.onLast.apply(context);
-                };
+                    config.onLast.apply(context)
+                }
             }
 
-            this.context = context;
+            this.context = context
         } else {
-            this.onFirst = config.onFirst || null;
-            this.onLast = config.onLast || null;
-            this.onEach = config.onEach || null;
+            this.onFirst = config.onFirst || null
+            this.onLast = config.onLast || null
+            this.onEach = config.onEach || null
         }
 
-        this.running = false;
+        this.running = false
     }
 
     /**
@@ -69,9 +69,9 @@ class Timer {
      */
     start() {
         if (this.ticks === this.duration && this.onFirst) {
-            this.onFirst();
+            this.onFirst()
         }
-        this.running = true;
+        this.running = true
     }
 
     /**
@@ -81,20 +81,20 @@ class Timer {
      */
     tick() {
         if (this.onEach) {
-            this.onEach();
+            this.onEach()
         }
 
         if (this.ticks === 0) {
             if (this.onLast) {
-                this.onLast();
+                this.onLast()
             }
-            this.running = false;
+            this.running = false
         }
 
-        this.ticks -= 1;
+        this.ticks -= 1
 
         if (this.context) {
-            this.context.ticks = this.ticks;
+            this.context.ticks = this.ticks
         }
     }
 
@@ -103,8 +103,8 @@ class Timer {
      * @method pause
      */
     pause() {
-        this.running = false;
+        this.running = false
     }
 }
 
-module.exports = Timer;
+module.exports = Timer

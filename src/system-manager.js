@@ -4,14 +4,14 @@
  * @module SystemManager
  */
 
-const System = require('./system.js');
+const System = require('./system.js')
 
 /**
  * Key for private registry.
  * @type {Symbol}
  * @private
  */
-let systemRegistry = Symbol();
+let systemRegistry = Symbol()
 
 /**
 * Class for managing Rubric.js systems.
@@ -28,9 +28,9 @@ module.exports = class SystemManager {
          * Internal Map for storing systems.
          * @private
          */
-        this[systemRegistry] = new Map();
+        this[systemRegistry] = new Map()
 
-        this.update = this.update.bind(this);
+        this.update = this.update.bind(this)
     }
 
     /**
@@ -41,14 +41,14 @@ module.exports = class SystemManager {
      * @return {string}                         The key for registered system.
      */
     register(system) {
-        let systemName = system.constructor.name;
+        let systemName = system.constructor.name
         if (!(system instanceof System)) {
-            throw new TypeError('Argument must be an instance of class System');
+            throw new TypeError('Argument must be an instance of class System')
         } else if (this[systemRegistry].has(systemName)) {
-            throw new Error(`An instance of class "${systemName}" is already defined`);
+            throw new Error(`An instance of class "${systemName}" is already defined`)
         }
-        this[systemRegistry].set(systemName, system);
-        return systemName;
+        this[systemRegistry].set(systemName, system)
+        return systemName
     }
 
     /**
@@ -58,21 +58,21 @@ module.exports = class SystemManager {
      */
     removeSystem(systemName) {
         if (typeof systemName === 'object') {
-            systemName = systemName.constructor.name;
+            systemName = systemName.constructor.name
         }
 
         if (typeof systemName !== 'string') {
-            throw new TypeError('Unexpected value for system name');
+            throw new TypeError('Unexpected value for system name')
         }
 
-        let registry = this[systemRegistry];
+        let registry = this[systemRegistry]
 
         if (!registry.has(systemName)) {
-            return false;
+            return false
         }
-        let system = registry.get(systemName);
-        registry.delete(systemName);
-        return system;
+        let system = registry.get(systemName)
+        registry.delete(systemName)
+        return system
     }
 
     /**
@@ -81,8 +81,8 @@ module.exports = class SystemManager {
      */
     update() {
         this[systemRegistry].forEach((system) => {
-            system.update();
-        });
+            system.update()
+        })
     }
 
     /**
@@ -90,6 +90,6 @@ module.exports = class SystemManager {
      * @method deleteAllSystems
      */
     deleteAllSystems() {
-        this[systemRegistry].clear();
+        this[systemRegistry].clear()
     }
-};
+}
