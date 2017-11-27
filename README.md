@@ -75,6 +75,12 @@ Cheers!
 
 ## TODO:
 
+- [ ] Add Symbol string for SystemManager.
+- [ ] System update override in constructor probably should not be arrow function?
+- [ ] SubSystem should probably throw when instanciated directly?
+- [ ] Either change or note the fact that timers' onFirst function doesn't run on the first tick. It runs immediately. Should onFirst or potential onStart be called when unpaused?
+- [ ] Improve entityFactory method trapping by making regex match for an uppercase character starting string after "create".
+
 - [ ] Proxy powertrain pause and stop methods through Rubric
 - [ ] Normalize type capitalization in docblocks
 - [ ] Normalize punctuation in errors

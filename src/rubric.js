@@ -16,7 +16,7 @@ let privateKey = Symbol('Rubric class private data key');
 /**
  * Class for managing engine, input and systems.
  */
- // * @class Rubric
+// * @class Rubric
 module.exports = class Rubric {
 
     /**
@@ -86,13 +86,31 @@ module.exports = class Rubric {
      * @throws {TypeError}              Throws if the argument is not a function.
      */
     setUpdate(fn) {
-        let engine = this[privateKey].engine;
+        let engine = this[privateKey].engine
         if (engine.running) {
-            throw new Error('Not allowed to override update method while Rubric is running');
+            throw new Error('Not allowed to override update method while Rubric is running')
+        } else if (typeof fn !== 'function') {
+            throw new TypeError('Argument must be a function')
+        }
+
+        engine.update = fn
+    }
+
+    /**
+     * Sets render method.
+     * @method setRender
+     * @param  {Function}       fn      The function to be set as Rubric's engine's render method.
+     * @throws {Error}                  Throws if engine is running.
+     * @throws {TypeError}              Throws if the argument is not a function.
+     */
+    setRender(fn) {
+        let engine = this[privateKey].engine
+        if (engine.running) {
+            throw new Error('Not allowed to override render method while Rubric is running')
         } else if (typeof fn !== 'function') {
             throw new TypeError('Argument must be a function');
         }
 
-        engine.update = fn;
+        engine.render = fn
     }
-};
+}
