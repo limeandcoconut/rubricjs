@@ -102,7 +102,7 @@ describe('Rubric Class', function() {
             expect(rubric.primaryInput).to.equal(testAdapter)
         })
 
-        it('should throw if argument is not class instance of InputAdapter', function() {
+        it('should throw if primary argument is not class instance of InputAdapter', function() {
             expect(() => {
                 rubric.addPrimaryInputAdapter('a')
             }).to.throw(TypeError, /input\s?adapter/i)
@@ -161,6 +161,42 @@ describe('Rubric Class', function() {
             rubric.setUpdate(bar)
 
             expect(rubric[privateKey].engine.update).to.equal(bar)
+        })
+    })
+
+    /**
+     * RENDER
+     */
+
+    describe('On the subject of the render method, it ', function() {
+
+        it('should throw if argument is not a function', function() {
+            expect(() => {
+                rubric.setRender('a')
+            }).to.throw(TypeError, /function/i)
+        })
+
+        it('should throw if rubric is already running', function() {
+            rubric.start()
+            expect(() => {
+                rubric.setRender(() => {})
+            }).to.throw(Error, /running/i)
+        })
+
+        it('should set method properly', function() {
+            let foo = () => {}
+            rubric.setRender(foo)
+
+            expect(rubric[privateKey].engine).to.have.property('render')
+        })
+
+        it('should override existing method', function() {
+            let foo = () => {}
+            rubric.setRender(foo)
+            let bar = () => {}
+            rubric.setRender(bar)
+
+            expect(rubric[privateKey].engine.render).to.equal(bar)
         })
     })
 })
