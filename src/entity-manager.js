@@ -9,13 +9,13 @@
  * @type {Symbol}
  * @private
  */
-let componentRegistry = Symbol()
+let componentRegistry = Symbol('Private key for component registry.')
 /**
  * Key for private a uid Array.
  * @type {Symbol}
  * @private
  */
-let entityIds = Symbol()
+let entityIds = Symbol('Private key for entity id array.')
 
 /**
 * Class for managing entities and components.
@@ -185,7 +185,7 @@ class EntityManager {
 
         let foundEntities = []
 
-        // TODO: Perf this to see if returning early is notably faster than allowing a forEach to fail on an empty map
+        // TODO: Perf this to see if returning early is notably faster than allowing an empty iterator to fail.
         if (!componentsOfType.size) {
             return foundEntities
         }
@@ -194,6 +194,7 @@ class EntityManager {
         let key = keys.next().value
 
         while (typeof key !== 'undefined') {
+            // TODO: When uids are not numbers this will be problematic
             foundEntities.push(Number(key))
             key = keys.next().value
         }
@@ -214,13 +215,14 @@ class EntityManager {
         componentNames = componentNames.slice()
 
         let commonEntities = this.getEntitiesWithComponent(this.validateComonentName(componentNames[0]))
-        componentNames.shift()
 
+        // TODO: Perf this to see if it's faster than failing the loop below.
         if (!commonEntities.length) {
             return commonEntities
         }
 
-        // TODO: Perf this similariliy to above perf
+        componentNames.shift()
+
         componentNames.some((componentName) => {
             componentName = this.validateComonentName(componentName)
             let entitiesWithComponent = this.getEntitiesWithComponent(componentName)

@@ -9,7 +9,7 @@ const System = require('./system.js')
 /**
  * Class for creating logical systems that depend on other systems.
  */
- // * @class SubSystem
+// * @class SubSystem
 
 class SubSystem extends System {
 
@@ -43,7 +43,7 @@ class SubSystem extends System {
             }
 
             return userUpdate.call(this, arguments)
-        };
+        }
     }
 
     /**

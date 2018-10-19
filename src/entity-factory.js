@@ -9,12 +9,12 @@
  * @type {Symbol}
  * @private
  */
-let registryKey = Symbol('Entity Factory registry key')
+let registryKey = Symbol('Entity Factory registry key.')
 
 /**
  * Class for managing entity constructor functions.
  */
- // * @class EntityFactory
+// * @class EntityFactory
 class EntityFactory {
 
     /**
@@ -37,11 +37,24 @@ class EntityFactory {
      */
     registerConstructor(entityName, entityConstructor) {
         if (typeof entityName !== 'string' || typeof entityConstructor !== 'function') {
-            throw new TypeError(`Parameters must be types string, function.
-                ${typeof entityName}, ${typeof entityConstructor} given.`)
+            throw new TypeError(`Parameters must be types: string, function.
+                Given: ${typeof entityName}, ${typeof entityConstructor}.`)
         }
         entityName = entityName.charAt(0).toUpperCase() + entityName.slice(1)
         this[registryKey].set(entityName, entityConstructor)
+    }
+
+    /**
+     * Get the constructor function for a given entity name.
+     * @param   {string}    entityName  The name of the constructor to retrieve.
+     * @return  {function}              The conscturtor function for the given type.
+     */
+    create(entityName) {
+        if (typeof entityName !== 'string') {
+            throw new TypeError(`Parameter must be a string. Given: ${typeof entityName}.`)
+        }
+        entityName = entityName.charAt(0).toUpperCase() + entityName.slice(1)
+        return this[registryKey].get(entityName)
     }
 }
 
@@ -80,7 +93,7 @@ let facoryHelper = {
 
         return function(...args) {
             return originalMethod.apply(this, args)
-        };
+        }
     },
 }
 

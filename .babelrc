@@ -1,8 +1,8 @@
 {
     "ignore": [
-        "dist",
+        "dist"
     ],
 
-    "presets": ["es2015", "stage-3"],
+    "presets": ["es2015"],
     "plugins": ["transform-runtime"]
 }

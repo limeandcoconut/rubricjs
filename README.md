@@ -4,7 +4,7 @@
 
 An es6 component, entity, system, framework with a minimal core. Rubric was designed with a verbose syntax and naming scheme that focuses on ease of use and clarity. This standpoint was largely inspired by Douglas Crockford's comment to the effect that code is meant to be "read by humans and incidentally run by machines".
 
-It relies on [powertrain](https://www.npmjs.com/package/powertrain) for its' engine and uses babel and mocha in dev.
+It uses babel in dev and AVA, nyc, and cowboy-hat for testing.
 
 ## Example
 There is a barebones 🍖  code example [here](https://github.com/limeandcoconut/rubric-example).
@@ -14,7 +14,7 @@ The is a running demo of it [here](http://rubric.thejacobsmith.com/), which is p
 
 There is a small jsdoc site [here](http://docs.thejacobsmith.com/module-EntityManager.html).
 
-Better documentation will be coming to the readme _very_ soon. 4/4/17
+Better documentation will be coming to the readme soon. 11/27/17
 
 ```js
 // Examples to follow shortly
@@ -27,12 +27,7 @@ module.exports = {
     // A useful way to pass things in to input adapters and other utilities
     // In the example implementation mentioned above these keys will have preventDefault() called when they are pressed
     preventKeys: ['up', 'down', 'space', 'left', 'right'],
-    // These options will all be passed to Rubric's core engine, Powertrain
-    engine: {
-        playspeed: 1,
-        fps: 60,
-    },
-    // More on this coming soon 4/4/17
+    // More on this coming soon 11/27/17
 };
 
 ```
@@ -75,6 +70,13 @@ Cheers!
 
 ## TODO:
 
+- [ ] Document and test create method in EntityFactory.
+- [ ] Switch to ISC.
+- [ ] Update example.
+- [ ] Update README.
+- [ ] Update Docs.
+- [ ] Switch tests to AVA.
+- [ ] Cleanout webpack and other bad dependencies
 - [ ] Add Symbol string for SystemManager.
 - [ ] System update override in constructor probably should not be arrow function?
 - [ ] SubSystem should probably throw when instanciated directly?

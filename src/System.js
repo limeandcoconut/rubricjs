@@ -25,7 +25,7 @@ module.exports = class System {
         }
 
         if (this.update === System.prototype.update) {
-            throw new AbstractConstructError('Method "update" must be overridden in class System')
+            throw new AbstractConstructError('Method "update" must be overridden in class "System"')
         }
 
         this.events = []
@@ -39,11 +39,11 @@ module.exports = class System {
          * @return {*}                                          Return is controlled by the user but currently has no
          *                                                      use for systems.
          */
-        this.update = () => {
+        this.update = (function() {
             this.clearEvents()
+            return userUpdate.apply(this, arguments)
+        }).bind(this)
 
-            return userUpdate.call(this, arguments)
-        }
     }
 
     /**
